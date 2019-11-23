@@ -2,11 +2,18 @@
 import pyglet
 from res import Resource
 from scenes import *
+from event_bus import EventBus
 
+bus = EventBus()
 res = Resource()
 window = pyglet.window.Window(caption='tabulr')
-scenes = [WelcomeScreen(window)]
+scenes = [WelcomeScreen(window, bus)]
 scene = 0
+
+@bus.on('next_scene')
+def on_next_scene():
+    global scene
+    scene += 1
 
 @window.event
 def on_draw():

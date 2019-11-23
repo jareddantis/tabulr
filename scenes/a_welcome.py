@@ -3,8 +3,8 @@ from .scene import Scene
 from pyglet.window.mouse import *
 
 class WelcomeScreen(Scene):
-    def __init__(self, window):
-        super().__init__(window)
+    def __init__(self, window, bus):
+        super().__init__(window, bus)
         window.set_caption('Welcome to tabulr')
         self.title = Text('Welcome to', batch=self.batch,
                           x=self.margin_left, y=(self.window.height//2) + 100)
@@ -21,7 +21,7 @@ class WelcomeScreen(Scene):
     def on_mouse_press(self, x, y, button, modifiers):
         if button == LEFT:
             if self.is_clicked('next_button', x, y):
-                print('clicked next button')
+                self.bus.emit('next_scene')
 
     def on_mouse_motion(self, x, y, dx, dy):
         next_button = self.sprites['next_button']

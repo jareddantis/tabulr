@@ -1,8 +1,9 @@
 from pyglet.graphics import Batch
 
 class Scene:
-    def __init__(self, window):
+    def __init__(self, window, bus):
         self.window = window
+        self.bus = bus
         self.batch = Batch()
         self.margin_left = 36
         self.sprites = {}
