@@ -7,12 +7,13 @@ from event_bus import EventBus
 bus = EventBus()
 res = Resource()
 window = pyglet.window.Window(caption='tabulr')
-scenes = [WelcomeScreen(window, bus)]
+scenes = [WelcomeScreen(window, bus), CourseInputScreen(window, bus)]
 scene = 0
 
 @bus.on('next_scene')
 def on_next_scene():
     global scene
+    scenes[scene].on_destroy()
     scene += 1
 
 @window.event
