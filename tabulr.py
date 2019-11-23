@@ -4,22 +4,30 @@ from res import Resource
 from scenes import *
 from event_bus import EventBus
 
-bus = EventBus()
-res = Resource()
-window = pyglet.window.Window(caption='tabulr')
-scenes = [WelcomeScreen(window, bus), CourseInputScreen(window, bus)]
-scene = 0
+bus = EventBus()                                                        # Communication from scenes
+res = Resource()                                                        # Application graphical/font resources
+window = pyglet.window.Window(caption='tabulr')                         # Main application window
+scenes = [WelcomeScreen(window, bus), CourseInputScreen(window, bus)]   # Application scenes
+scene = 0                                                               # Current application scene
 
 # for scene switching
 @bus.on('next_scene')
 def on_next_scene():
+    '''
+    Change the scene that is currently being displayed to the next one.
+    :return:
+    '''
     global scene
-    scenes[scene].on_destroy()
-    scene += 1
+    if scene < len(scenes) - 1:
+        scenes[scene].on_destroy()
+        scene += 1
 
-# drawing whatever is on there
 @window.event
 def on_draw():
+    '''
+    Draw current scene.
+    :return:
+    '''
     window.clear()
     scenes[scene].on_draw()
 
