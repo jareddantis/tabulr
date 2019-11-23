@@ -15,9 +15,6 @@ class WelcomeScreen(Scene):
         self.init_sprite('next_button', Button('next', self.window, self.batch,
                                                x=self.margin_left, y=(self.window.height//2) - 100))
 
-    def update(self, dt):
-        pass
-
     def on_mouse_press(self, x, y, button, modifiers):
         if button == LEFT:
             if self.is_clicked('next_button', x, y):

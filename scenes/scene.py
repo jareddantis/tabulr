@@ -19,7 +19,7 @@ class Scene:
         return sprite_min_x <= mouse_x <= sprite_max_x and sprite_min_y <= mouse_y <= sprite_max_y
 
     '''
-    pyglet event methods
+    pyglet methods
     '''
 
     def on_draw(self):
@@ -33,4 +33,7 @@ class Scene:
         pass
 
     def on_mouse_motion(self, x, y, dx, dy):
+        pass
+
+    def update(self, dt):
         pass
