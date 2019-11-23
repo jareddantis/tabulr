@@ -1,29 +1,25 @@
-from pyglet.text import Label
-from ui import Button
+from ui import Button, Text
 from .scene import Scene
 
 class WelcomeScreen(Scene):
-    def __init__(self, window):
-        super().__init__(window)
+    def __init__(self, window, batch):
+        super().__init__(window, batch)
         window.set_caption('Welcome to tabulr')
-        self.title = Label('Welcome to', batch=self.batch, font_name='Rubik', font_size=28,
-                           x=self.margin_left, y=(window.height//2) + 100)
-        self.title_bold = Label('tabulr', batch=self.batch, font_name='Rubik Bold', font_size=28,
-                                x=self.margin_left, y=(window.height//2) + 60)
-        self.next_button = Button('next', window, self.batch,
-                                  x=self.margin_left, y=(window.height//2) - 100)
+        self.title = Text('Welcome to', batch=self.batch,
+                          x=self.margin_left, y=(self.window.height//2) + 100)
+        self.title_bold = Text('tabulr', bold=True, batch=self.batch,
+                               x=self.margin_left, y=(self.window.height//2) + 60)
+        self.init_sprite('next_button', Button('next', self.window, self.batch,
+                                               x=self.margin_left, y=(self.window.height//2) - 100))
 
     def update(self, dt):
-        self.next_button.update(dt)
-
-    def on_draw(self):
-        self.next_button.draw()
-        self.batch.draw()
+        self.sprites['next_button'].update(dt)
 
     def on_mouse_motion(self, x, y, dx, dy):
-        image_width = self.next_button.x + self.next_button.width
-        image_height = self.next_button.y + self.next_button.height
-        if image_width > x > self.next_button.x and image_height > y > self.next_button.y:
-            self.next_button.on_mouse_enter()
+        next_button = self.sprites['next_button']
+        image_width = next_button.x + next_button.width
+        image_height = next_button.y + next_button.height
+        if image_width > x > next_button.x and image_height > y > next_button.y:
+            next_button.on_mouse_enter()
         else:
-            self.next_button.on_mouse_leave()
+            next_button.on_mouse_leave()

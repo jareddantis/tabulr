@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 import pyglet
 from res import Resource
-from scenes import WelcomeScreen
+from scenes import *
 
 res = Resource()
-window = pyglet.window.Window(caption='tabulr')
 batch = pyglet.graphics.Batch()
-scenes = [WelcomeScreen(window)]
+window = pyglet.window.Window(caption='tabulr')
+scenes = [WelcomeScreen(window, batch)]
 scene = 0
 
 @window.event
 def on_draw():
     window.clear()
-    scenes[scene].on_draw()
+    batch.draw()
 
 @window.event
 def on_mouse_motion(x, y, dx, dy):
