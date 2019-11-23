@@ -15,6 +15,24 @@ class CourseInputScreen(Scene):
         next_button.x = self.window.width - self.margin - next_button.image.width
         self.init_sprite('next_button', next_button)
 
+        # Course Title
+        # Section
+        # Venue
+        venue_tinput = TextInput('', 200, 100, self.width - 210, self.batch)
+        # Instructor (Optional)
+
+        # Add to Schedule button: uncomment when btn-view & text field exists already
+        # add_button = Button('view', self.window, self.batch)
+        # add_button.x = instructor_field.x
+        # add_button.y = self.window.height - self.margin - next_button.image.width
+        # self.init_sprite('view_button', view_button)
+
+        # View or Edit Courselist button: uncomment when btn-view exists already
+        # view_button = Button('view', self.window, self.batch)
+        # view_button.x = add_button.x
+        # view_button.y = add_button.y + (self.margin + 25)
+        # self.init_sprite('view_button', view_button)
+
     def on_draw(self):
         super().on_draw()
         self.window.set_caption('tabulr | Input subjects')

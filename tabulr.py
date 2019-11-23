@@ -10,12 +10,14 @@ window = pyglet.window.Window(caption='tabulr')
 scenes = [WelcomeScreen(window, bus), CourseInputScreen(window, bus)]
 scene = 0
 
+# for scene switching
 @bus.on('next_scene')
 def on_next_scene():
     global scene
     scenes[scene].on_destroy()
     scene += 1
 
+# drawing whatever is on there
 @window.event
 def on_draw():
     window.clear()
