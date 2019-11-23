@@ -1,4 +1,4 @@
-from ui import Button, Text
+from ui import Button, Text, TextInput
 from .scene import Scene
 from pyglet.window.mouse import *
 
@@ -18,7 +18,7 @@ class CourseInputScreen(Scene):
         # Course Title
         # Section
         # Venue
-        venue_tinput = TextInput('', 200, 100, self.width - 210, self.batch)
+        venue_tinput = TextInput('', 200, 100, self.window.width - 210, self.batch)
         # Instructor (Optional)
 
         # Add to Schedule button: uncomment when btn-view & text field exists already
