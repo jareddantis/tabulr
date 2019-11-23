@@ -39,6 +39,26 @@ def on_mouse_motion(x, y, dx, dy):
 def on_mouse_press(x, y, button, modifiers):
     scenes[scene].on_mouse_press(x, y, button, modifiers)
 
+@window.event
+def on_mouse_drag(x, y, dx, dy, buttons, modifiers):
+    scenes[scene].on_mouse_drag(x, y, dx, dy, buttons, modifiers)
+
+@window.event
+def on_text(text):
+    scenes[scene].on_text(text)
+
+@window.event
+def on_text_motion(motion):
+    scenes[scene].on_text_motion(motion)
+
+@window.event
+def on_text_motion_select(motion):
+    scenes[scene].on_text_motion_select(motion)
+
+@window.event
+def on_key_press(symbol, modifiers):
+    scenes[scene].on_key_press(symbol, modifiers)
+
 def update(dt):
     scenes[scene].update(dt)
 
