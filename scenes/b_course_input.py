@@ -83,7 +83,6 @@ class CourseInputScreen(Scene):
     def on_text(self, text):
         if self.window.focus:
             self.window.focus.caret.on_text(text)
-            print(text)
 
     def on_text_motion(self, motion):
         if self.window.focus:
