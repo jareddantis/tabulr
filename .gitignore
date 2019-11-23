@@ -102,5 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+assets/
 **/*.ai
-**/*.sketch.idea/**/*
+**/*.sketch
+.idea/
