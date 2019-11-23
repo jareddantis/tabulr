@@ -4,19 +4,22 @@ from res import Resource
 from scenes import *
 
 res = Resource()
-batch = pyglet.graphics.Batch()
 window = pyglet.window.Window(caption='tabulr')
-scenes = [WelcomeScreen(window, batch)]
+scenes = [WelcomeScreen(window)]
 scene = 0
 
 @window.event
 def on_draw():
     window.clear()
-    batch.draw()
+    scenes[scene].on_draw()
 
 @window.event
 def on_mouse_motion(x, y, dx, dy):
     scenes[scene].on_mouse_motion(x, y, dx, dy)
+
+@window.event
+def on_mouse_press(x, y, button, modifiers):
+    scenes[scene].on_mouse_press(x, y, button, modifiers)
 
 def update(dt):
     scenes[scene].update(dt)
