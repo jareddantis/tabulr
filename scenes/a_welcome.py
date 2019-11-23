@@ -5,7 +5,6 @@ from pyglet.window.mouse import *
 class WelcomeScreen(Scene):
     def __init__(self, window, bus):
         super().__init__(window, bus)
-        window.set_caption('Welcome to tabulr')
         self.title = Text('Welcome to', batch=self.batch,
                           x=self.margin, y=(self.window.height//2) + 100)
         self.title_bold = Text('tabulr', bold=True, batch=self.batch,
@@ -14,6 +13,10 @@ class WelcomeScreen(Scene):
                              x=self.margin, y=self.window.height//2)
         self.init_sprite('next_button', Button('next', self.window, self.batch,
                                                x=self.margin, y=(self.window.height//2) - 100))
+
+    def on_draw(self):
+        super().on_draw()
+        self.window.set_caption('Welcome to tabulr')
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == LEFT:
