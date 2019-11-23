@@ -4,9 +4,8 @@ class Button(pyglet.sprite.Sprite):
     def __init__(self, filename, window, batch, x=0, y=0):
         self.texture_default = pyglet.resource.image('btn-{}.png'.format(filename))
         self.texture_hover = pyglet.resource.image('btn-{}-hover.png'.format(filename))
-        self.filename = filename
+        super().__init__(self.texture_default, x=x, y=y)
         self.window = window
-        super(Button, self).__init__(self.texture_default, x, y, batch=batch)
 
     def on_mouse_enter(self):
         self.image = self.texture_hover

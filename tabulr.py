@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import pyglet
+from res import Resource
 from scenes import WelcomeScreen
 
-pyglet.resource.path = ['res']
-pyglet.resource.reindex()
+res = Resource()
 window = pyglet.window.Window(caption='tabulr')
 batch = pyglet.graphics.Batch()
 scenes = [WelcomeScreen(window)]
