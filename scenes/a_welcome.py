@@ -7,13 +7,13 @@ class WelcomeScreen(Scene):
         super().__init__(window, bus)
         window.set_caption('Welcome to tabulr')
         self.title = Text('Welcome to', batch=self.batch,
-                          x=self.margin_left, y=(self.window.height//2) + 100)
+                          x=self.margin, y=(self.window.height//2) + 100)
         self.title_bold = Text('tabulr', bold=True, batch=self.batch,
-                               x=self.margin_left, y=(self.window.height//2) + 60)
+                               x=self.margin, y=(self.window.height//2) + 60)
         self.subtitle = Text('Your schedule, from list to wallpaper. Like magic.', size=12, batch=self.batch,
-                             x=self.margin_left, y=self.window.height//2)
+                             x=self.margin, y=self.window.height//2)
         self.init_sprite('next_button', Button('next', self.window, self.batch,
-                                               x=self.margin_left, y=(self.window.height//2) - 100))
+                                               x=self.margin, y=(self.window.height//2) - 100))
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == LEFT:

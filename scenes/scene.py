@@ -5,7 +5,7 @@ class Scene:
         self.window = window
         self.bus = bus
         self.batch = Batch()
-        self.margin_left = 36
+        self.margin = 36
         self.sprites = {}
 
     def init_sprite(self, name, sprite):
