@@ -1,3 +1,4 @@
+import pyglet
 from ui import Button, Text, TextInput
 from .scene import Scene
 from pyglet.window.mouse import *
@@ -15,11 +16,21 @@ class CourseInputScreen(Scene):
         next_button.x = self.window.width - self.margin - next_button.image.width
         self.init_sprite('next_button', next_button)
 
-        # Course Title
+
         # Section
-        # Venue
-        venue_tinput = TextInput('', 200, 100, self.window.width - 210, self.batch)
-        # Instructor (Optional)
+        self.batch = pyglet.graphics.Batch()
+        self.inputs = [
+            # Course Title
+            TextInput('', 200, 100, window.width - 210, self.batch),
+            # Venue
+            TextInput('', 200, 60, window.width - 210, self.batch),
+            # Instructor (Optional)
+            TextInput('', 200, 20, window.width - 210, self.batch)
+        ]
+        window.text_cursor = window.get_system_mouse_cursor('text')
+
+        window.focus = None
+        TextInput.set_focus(window, self.inputs[0])
 
         # Add to Schedule button: uncomment when btn-view & text field exists already
         # add_button = Button('view', self.window, self.batch)
