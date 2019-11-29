@@ -29,6 +29,11 @@ class CourseInputScreen(Scene):
         add_button = Button('add-to-sched', self.window, self.batch, x=self.margin, y=self.margin)
         self.init_sprite('add_button', add_button)
 
+        # View button
+        view_button = Button('view-courses', self.window, self.batch,
+                             x=(1.5*self.margin) + add_button.width, y=self.margin)
+        self.init_sprite('view_button', view_button)
+
         # Section
         self.inputs = [
             # Course Title
@@ -47,18 +52,6 @@ class CourseInputScreen(Scene):
             Text('Venue', size=14, x=self.margin, y=280, batch=self.batch),
             Text('Instructor (optional)', size=14, x=self.margin, y=210, batch=self.batch)
         ]
-
-        # Add to Schedule button: uncomment when btn-view & text field exists already
-        # add_button = Button('view', self.window, self.batch)
-        # add_button.x = instructor_field.x
-        # add_button.y = self.window.height - self.margin - next_button.image.width
-        # self.init_sprite('view_button', view_button)
-
-        # View or Edit Courselist button: uncomment when btn-view exists already
-        # view_button = Button('view', self.window, self.batch)
-        # view_button.x = add_button.x
-        # view_button.y = add_button.y + (self.margin + 25)
-        # self.init_sprite('view_button', view_button)
 
     def on_draw(self):
         super().on_draw()
