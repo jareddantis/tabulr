@@ -18,7 +18,7 @@ class CourseInputScreen(Scene):
         waves_img.anchor_x = waves_img.width
         waves = Sprite(waves_img, x=window.width, y=0, batch=self.batch)
         waves.opacity = 160
-        self.init_sprite('waves', waves)
+        self.init_sprite('waves', waves, is_button=False)
 
         # Next button
         next_button = Button('tick', self.window, self.batch, y=self.margin)
@@ -61,8 +61,8 @@ class CourseInputScreen(Scene):
         if self.is_clicked('next_button', x, y) and button == LEFT:
             self.bus.emit('next_scene')
         else:
-            for input in self.inputs:
-                if input.hit_test(x, y):
+            for text_field in self.inputs:
+                if text_field.hit_test(x, y):
                     self.set_focus(input)
                     break
             else:
@@ -70,27 +70,6 @@ class CourseInputScreen(Scene):
 
             if self.window.focus:
                 self.window.focus.caret.on_mouse_press(x, y, button, modifiers)
-
-    def on_mouse_motion(self, x, y, dx, dy):
-        # Change cursor on text input hover
-        for input in self.inputs:
-            if input.hit_test(x, y):
-                self.window.set_mouse_cursor(self.window.get_system_mouse_cursor(self.window.CURSOR_TEXT))
-                break
-        else:
-
-            # Change button state on hover
-            for sprite in self.sprites:
-                try:
-                    if sprite.hit_test(x, y):
-                        sprite.on_mouse_enter()
-                        break
-                    else:
-                        sprite.on_mouse_leave()
-                except Exception:
-                    continue
-            else:
-                self.window.set_mouse_cursor(self.window.get_system_mouse_cursor(self.window.CURSOR_DEFAULT))
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         if self.window.focus:

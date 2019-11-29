@@ -18,7 +18,7 @@ class WelcomeScreen(Scene):
 
         waves = Sprite(image('front-waves.png'), x=0, y=0, batch=self.batch)
         waves.opacity = 160
-        self.init_sprite('waves', waves)
+        self.init_sprite('waves', waves, is_button=False)
 
     def on_draw(self):
         super().on_draw()
@@ -30,7 +30,7 @@ class WelcomeScreen(Scene):
                 self.bus.emit('next_scene')
 
     def on_mouse_motion(self, x, y, dx, dy):
-        next_button = self.sprites['next_button']
+        next_button = self.sprites['next_button'][0]
         image_width = next_button.x + next_button.width
         image_height = next_button.y + next_button.height
         if image_width > x > next_button.x and image_height > y > next_button.y:
