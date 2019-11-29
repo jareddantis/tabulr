@@ -1,6 +1,8 @@
 from ui import Button, Text
 from .scene import Scene
 from pyglet.window.mouse import *
+from pyglet.sprite import Sprite
+from pyglet.resource import image
 
 class WelcomeScreen(Scene):
     def __init__(self, window, bus):
@@ -13,6 +15,10 @@ class WelcomeScreen(Scene):
                              x=self.margin, y=self.window.height//2)
         self.init_sprite('next_button', Button('next', self.window, self.batch,
                                                x=self.margin, y=(self.window.height//2) - 100))
+
+        waves = Sprite(image('front-waves.png'), x=0, y=0, batch=self.batch)
+        waves.opacity = 160
+        self.init_sprite('waves', waves)
 
     def on_draw(self):
         super().on_draw()

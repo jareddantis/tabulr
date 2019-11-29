@@ -2,31 +2,51 @@ import pyglet
 from ui import Button, Text, TextInput
 from .scene import Scene
 from pyglet.window.mouse import *
+from pyglet.sprite import Sprite
+from pyglet.resource import image
 
 class CourseInputScreen(Scene):
     def __init__(self, window, bus):
         super().__init__(window, bus)
-        self.title = Text('Input your', batch=self.batch, size=22,
+        self.title = Text('Input a', batch=self.batch, size=22,
                           x=self.margin, y=self.window.height - self.margin - 22)
-        self.title_bold = Text('courses', bold=True, batch=self.batch, size=22,
+        self.title_bold = Text('course', bold=True, batch=self.batch, size=22,
                                x=self.margin + self.title.content_width + 8, y=self.window.height - self.margin - 22)
 
+        # Waves
+        waves_img = image('side-waves.png')
+        waves_img.anchor_x = waves_img.width
+        waves = Sprite(waves_img, x=window.width, y=0, batch=self.batch)
+        waves.opacity = 160
+        self.init_sprite('waves', waves)
+
         # Next button
-        next_button = Button('next', self.window, self.batch, y=self.margin)
+        next_button = Button('tick', self.window, self.batch, y=self.margin)
         next_button.x = self.window.width - self.margin - next_button.image.width
         self.init_sprite('next_button', next_button)
+
+        # Add button
+        add_button = Button('add-to-sched', self.window, self.batch, x=self.margin, y=self.margin)
+        self.init_sprite('add_button', add_button)
 
         # Section
         self.inputs = [
             # Course Title
-            TextInput('', 200, 100, self.window.width - 210, self.batch),
+            TextInput('', self.margin, 320, 200, self.batch),
             # Venue
-            TextInput('', 200, 60, self.window.width - 210, self.batch),
+            TextInput('', self.margin, 250, self.window.width - 210, self.batch),
             # Instructor (Optional)
-            TextInput('', 200, 20, self.window.width - 210, self.batch)
+            TextInput('', self.margin, 180, self.window.width - 210, self.batch)
         ]
         self.window.focus = None
         self.set_focus(self.inputs[0])
+
+        # Section labels
+        self.labels = [
+            Text('Course title', size=14, x=self.margin, y=350, batch=self.batch),
+            Text('Venue', size=14, x=self.margin, y=280, batch=self.batch),
+            Text('Instructor (optional)', size=14, x=self.margin, y=210, batch=self.batch)
+        ]
 
         # Add to Schedule button: uncomment when btn-view & text field exists already
         # add_button = Button('view', self.window, self.batch)
@@ -59,22 +79,25 @@ class CourseInputScreen(Scene):
                 self.window.focus.caret.on_mouse_press(x, y, button, modifiers)
 
     def on_mouse_motion(self, x, y, dx, dy):
-        # Change button state on hover
-        next_button = self.sprites['next_button']
-        image_width = next_button.x + next_button.width
-        image_height = next_button.y + next_button.height
-        if image_width > x > next_button.x and image_height > y > next_button.y:
-            next_button.on_mouse_enter()
-        else:
-            next_button.on_mouse_leave()
-
         # Change cursor on text input hover
         for input in self.inputs:
             if input.hit_test(x, y):
                 self.window.set_mouse_cursor(self.window.get_system_mouse_cursor(self.window.CURSOR_TEXT))
                 break
         else:
-            self.window.set_mouse_cursor(self.window.get_system_mouse_cursor(self.window.CURSOR_DEFAULT))
+
+            # Change button state on hover
+            for sprite in self.sprites:
+                try:
+                    if sprite.hit_test(x, y):
+                        sprite.on_mouse_enter()
+                        break
+                    else:
+                        sprite.on_mouse_leave()
+                except Exception:
+                    continue
+            else:
+                self.window.set_mouse_cursor(self.window.get_system_mouse_cursor(self.window.CURSOR_DEFAULT))
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         if self.window.focus:

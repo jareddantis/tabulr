@@ -17,6 +17,11 @@ class Button(pyglet.sprite.Sprite):
         self.window = window
         super().__init__(self.texture_default, x=x, y=y, batch=batch)
 
+    def hit_test(self, x, y):
+        image_width = self.x + self.width
+        image_height = self.y + self.height
+        return image_width > x > self.x and image_height > y > self.y
+
     def on_mouse_enter(self):
         '''
         Called when the mouse moves over the button.

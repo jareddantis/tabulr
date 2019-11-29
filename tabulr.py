@@ -1,68 +1,57 @@
 #!/usr/bin/env python3
-import pyglet
+from pyglet import window, clock, app, gl
 from res import Resource
-from scenes import *
-from event_bus import EventBus
+from scenes import Director
 
-bus = EventBus()                                                        # Communication from scenes
-res = Resource()                                                        # Application graphical/font resources
-window = pyglet.window.Window(caption='tabulr')                         # Main application window
-scenes = [WelcomeScreen(window, bus), CourseInputScreen(window, bus)]   # Application scenes
-scene = 0                                                               # Current application scene
+res = Resource()                                    # Application graphical/font resources
+window = window.Window(caption='tabulr')     # Main application window
+director = Director(window)                         # For switching between scenes
 
-# for scene switching
-@bus.on('next_scene')
+@director.on('next_scene')
 def on_next_scene():
-    '''
-    Change the scene that is currently being displayed to the next one.
-    :return:
-    '''
-    global scene
-    if scene < len(scenes) - 1:
-        scenes[scene].on_destroy()
-        scene += 1
+    director.on_next_scene()
 
 @window.event
 def on_draw():
-    '''
+    """
     Draw current scene.
     :return:
-    '''
+    """
     window.clear()
-    scenes[scene].on_draw()
+    director.on_draw()
 
 @window.event
 def on_mouse_motion(x, y, dx, dy):
-    scenes[scene].on_mouse_motion(x, y, dx, dy)
+    director.current_scene.on_mouse_motion(x, y, dx, dy)
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):
-    scenes[scene].on_mouse_press(x, y, button, modifiers)
+    director.current_scene.on_mouse_press(x, y, button, modifiers)
 
 @window.event
 def on_mouse_drag(x, y, dx, dy, buttons, modifiers):
-    scenes[scene].on_mouse_drag(x, y, dx, dy, buttons, modifiers)
+    director.current_scene.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
 
 @window.event
 def on_text(text):
-    scenes[scene].on_text(text)
+    director.current_scene.on_text(text)
 
 @window.event
 def on_text_motion(motion):
-    scenes[scene].on_text_motion(motion)
+    director.current_scene.on_text_motion(motion)
 
 @window.event
 def on_text_motion_select(motion):
-    scenes[scene].on_text_motion_select(motion)
+    director.current_scene.on_text_motion_select(motion)
 
 @window.event
 def on_key_press(symbol, modifiers):
-    scenes[scene].on_key_press(symbol, modifiers)
+    director.current_scene.on_key_press(symbol, modifiers)
 
 def update(dt):
-    scenes[scene].update(dt)
+    director.current_scene.update(dt)
 
 if __name__ == "__main__":
-    pyglet.gl.glClearColor(43/255, 65/255, 98/255, 1)
-    pyglet.clock.schedule_interval(update, 1/60.0)
-    pyglet.app.run()
+    gl.glClearColor(43/255, 65/255, 98/255, 1)
+    clock.schedule_interval(update, 1/60.0)
+    app.run()
