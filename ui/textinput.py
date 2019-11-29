@@ -9,7 +9,7 @@ class Rectangle(object):
                                      ('c4B', [200, 200, 220, 255] * 4)
                                      )
 
-class TextInput(object):
+class TextInput:
     def __init__(self, text, x, y, width, batch):
         self.document = pyglet.text.document.UnformattedDocument(text)
         self.document.set_style(0, len(self.document.text), dict(color=(0, 0, 0, 255)))
@@ -27,6 +27,14 @@ class TextInput(object):
         pad = 2
         self.rectangle = Rectangle(x - pad, y - pad,
                                    x + width + pad, y + height + pad, batch)
+
+    @property
+    def content(self):
+        return self.document.text
+
+    @content.setter
+    def content(self, new_content):
+        self.document.text = new_content
 
     def hit_test(self, x, y):
         return (0 < x - self.layout.x < self.layout.width and

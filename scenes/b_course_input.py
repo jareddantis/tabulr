@@ -1,6 +1,7 @@
-import pyglet
 from ui import Button, Text, TextInput
-from .scene import Scene
+from util.scene import Scene
+from util.course_mgr import CourseManager
+from pyglet.window import key
 from pyglet.window.mouse import *
 from pyglet.sprite import Sprite
 from pyglet.resource import image
@@ -50,8 +51,12 @@ class CourseInputScreen(Scene):
         self.labels = [
             Text('Course title', size=14, x=self.margin, y=350, batch=self.batch),
             Text('Venue', size=14, x=self.margin, y=280, batch=self.batch),
-            Text('Instructor (optional)', size=14, x=self.margin, y=210, batch=self.batch)
+            Text('Instructor (optional)', size=14, x=self.margin, y=210, batch=self.batch),
+            Text('0 courses added', size=12, x=self.margin, y=100, batch=self.batch)
         ]
+
+        # Course manager instance
+        self.manager = CourseManager()
 
     def on_draw(self):
         super().on_draw()
@@ -67,6 +72,28 @@ class CourseInputScreen(Scene):
                     break
             else:
                 self.set_focus(None)
+
+                if self.sprites['add_button'][0].hit_test(x, y):
+                    # Get course details
+                    title = self.inputs[0].content
+                    venue = self.inputs[1].content
+                    instructor = self.inputs[2].content
+
+                    # Make sure title and venue are not empty
+                    if len(title) and len(venue):
+                        self.manager.add_course(title, venue, instructor)
+
+                        # Update course count
+                        self.labels[3].text = '{} courses added'.format(self.manager.num_courses)
+
+                        # Put focus back on first text input
+                        self.set_focus(self.inputs[0])
+
+                        # Empty text inputs
+                        for text_field in self.inputs:
+                            text_field.content = ''
+                    else:
+                        print('Either title or venue were left empty')
 
             if self.window.focus:
                 self.window.focus.caret.on_mouse_press(x, y, button, modifiers)
@@ -88,8 +115,8 @@ class CourseInputScreen(Scene):
             self.window.focus.caret.on_text_motion_select(motion)
 
     def on_key_press(self, symbol, modifiers):
-        if symbol == pyglet.window.key.TAB:
-            if modifiers & pyglet.window.key.MOD_SHIFT:
+        if symbol == key.TAB:
+            if modifiers & key.MOD_SHIFT:
                 direction = -1
             else:
                 direction = 1
