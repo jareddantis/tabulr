@@ -1,5 +1,5 @@
 from ui import Button, Text
-from .scene import Scene
+from util.scene import Scene
 from pyglet.window.mouse import *
 from pyglet.sprite import Sprite
 from pyglet.resource import image

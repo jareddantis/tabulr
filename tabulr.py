@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from pyglet import window, clock, app, gl
 from res import Resource
-from util import Director
+from util.director import Director
 
 res = Resource()                                    # Application graphical/font resources
 window = window.Window(caption='tabulr')     # Main application window
