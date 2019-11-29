@@ -1,13 +1,12 @@
 from ui import Button, Text, TextInput
 from util.scene import Scene
-from util.course_mgr import CourseManager
 from pyglet.window import key
 from pyglet.window.mouse import *
 from pyglet.sprite import Sprite
 from pyglet.resource import image
 
 class CourseInputScreen(Scene):
-    def __init__(self, window, bus):
+    def __init__(self, window, bus, manager):
         super().__init__(window, bus)
         self.title = Text('Input a', batch=self.batch, size=22,
                           x=self.margin, y=self.window.height - self.margin - 22)
@@ -56,7 +55,7 @@ class CourseInputScreen(Scene):
         ]
 
         # Course manager instance
-        self.manager = CourseManager()
+        self.manager = manager
 
     def on_draw(self):
         super().on_draw()
@@ -84,7 +83,8 @@ class CourseInputScreen(Scene):
                         self.manager.add_course(title, venue, instructor)
 
                         # Update course count
-                        self.labels[3].text = '{} courses added'.format(self.manager.num_courses)
+                        num_courses = self.manager.num_courses
+                        self.labels[3].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
 
                         # Put focus back on first text input
                         self.set_focus(self.inputs[0])
@@ -94,6 +94,8 @@ class CourseInputScreen(Scene):
                             text_field.content = ''
                     else:
                         print('Either title or venue were left empty')
+                elif self.sprites['view_button'][0].hit_test(x, y):
+                    self.manager.view_courses()
 
             if self.window.focus:
                 self.window.focus.caret.on_mouse_press(x, y, button, modifiers)
