@@ -14,9 +14,9 @@ class CourseViewer(Window):
         self.parent_window = parent_window
         glClearColor(43 / 255, 65 / 255, 98 / 255, 1)
 
-        # The courses inputted so far will be stored in self.course_data.
+        # The courses entered so far will be stored in self.course_data.
         # This is a dict, where each key is the course name
-        # and the value is a tuple of the format (<venue>, <instructor>).
+        # and the value is a tuple of the format (<section>, <venue>, <instructor>).
         self.course_data = course_data
 
         # UI text

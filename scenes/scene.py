@@ -33,6 +33,9 @@ class Scene:
             sprite[0].delete()
 
     def on_draw(self):
+        """
+        Draws all objects that are part of this scene's render batch.
+        """
         self.batch.draw()
 
     def on_mouse_motion(self, x, y, dx, dy):

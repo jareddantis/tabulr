@@ -13,7 +13,7 @@ class CourseInputScreen(Scene):
         self.title_bold = Text('course', bold=True, batch=self.batch, size=22,
                                x=self.margin + self.title.content_width + 8, y=self.window.height - self.margin - 22)
 
-        # Waves
+        # Waves background
         waves_img = image('side-waves.png')
         waves_img.anchor_x = waves_img.width
         waves = Sprite(waves_img, x=window.width, y=0, batch=self.batch)
@@ -29,7 +29,7 @@ class CourseInputScreen(Scene):
         add_button = Button('add-course', self.window, self.batch, x=self.margin, y=self.margin)
         self.init_sprite('add_button', add_button)
 
-        # Section
+        # Text inputs
         self.inputs = [
             # Course Title
             TextInput('', self.margin, 320, 200, self.batch),
@@ -43,9 +43,7 @@ class CourseInputScreen(Scene):
         self.window.focus = None
         self.set_focus(self.inputs[0])
 
-        # Section labels
-        self.error_elapsed = 0
-        self.error_opacity = 0
+        # Text input labels and status messages
         self.labels = [
             Text('Course title', size=14, x=self.margin, y=350, batch=self.batch),
             Text('Section', size=14, x=self.margin + 250, y=350, batch=self.batch),
@@ -56,11 +54,18 @@ class CourseInputScreen(Scene):
             Text('', size=12, bold=True, x=self.margin, y=self.margin*2 + add_button.height, batch=self.batch)
         ]
 
+        # Error message properties
+        self.error_elapsed = 0
+        self.error_opacity = 0
+
         # Course manager instance
         self.manager = manager
         self.manager.set_close_handler(self.update_count)
 
     def update_count(self):
+        """
+        Update on-screen course count.
+        """
         num_courses = self.manager.num_courses
         if num_courses > 0:
             self.labels[4].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
@@ -73,10 +78,13 @@ class CourseInputScreen(Scene):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if self.sprites['next_button'][0].hit_test(x, y) and button == LEFT:
+            # Check if we can go to the next scene
             if self.manager.num_courses > 0:
+                # At least one course was specified, go ahead
                 self.hide_error_message()
                 self.manager.view_courses()
             else:
+                # No courses specified
                 self.set_error_message('Please add at least one course first.')
         elif self.sprites['add_button'][0].hit_test(x, y) and button == LEFT:
             # Get course details
@@ -111,6 +119,12 @@ class CourseInputScreen(Scene):
                 self.set_focus(None)
 
     def on_key_press(self, symbol, modifiers):
+        """
+        Allows focusing text inputs through Tab and Shift+Tab.
+        :param symbol: Keyboard symbol
+        :param modifiers: Keyboard modifier keys
+        :return:
+        """
         if symbol == key.TAB:
             if modifiers & key.MOD_SHIFT:
                 direction = -1
@@ -126,16 +140,27 @@ class CourseInputScreen(Scene):
             self.set_focus(self.inputs[(i + direction) % len(self.inputs)])
 
     def hide_error_message(self):
+        """
+        Hides the error message.
+        """
         self.labels[5].color = (0, 0, 0, 0)
         self.error_opacity = 0
 
     def set_error_message(self, msg):
+        """
+        Displays a red error message.
+        :param msg: Error message
+        """
         self.labels[5].text = msg
         self.labels[5].color = (236, 64, 122, 255)
         self.error_elapsed = 0
         self.error_opacity = 255
 
     def update(self, dt):
+        """
+        Fades out the error message after 1.5 seconds of initial visibility.
+        :param dt: Time elapsed since last update
+        """
         if self.error_opacity > 0:
             self.error_elapsed += dt
             if self.error_elapsed > 1.5:

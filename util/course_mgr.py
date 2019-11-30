@@ -9,15 +9,27 @@ class CourseManager:
 
     @property
     def num_courses(self):
+        """
+        Number of courses added so far.
+        """
         return len(self.courses)
 
     def add_course(self, title, section, venue, instructor):
         self.courses[title] = (section, venue, instructor)
 
     def set_close_handler(self, fn):
+        """
+        Sets function to call when the course viewer is closed.
+        Currently this is used to update the on-screen course count
+        in case the user deletes a course.
+        :param fn: Function to call
+        """
         self.on_viewer_close = fn
 
     def view_courses(self):
+        """
+        Spawn a new window for viewing all entered courses.
+        """
         if self.viewer is not None and not self.viewer.closed:
             # Window already spawned
             if not self.viewer.visible:

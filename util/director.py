@@ -7,7 +7,9 @@ class Director(EventBus):
     def __init__(self, window):
         super().__init__()
         self.course_mgr = CourseManager(window)
-        self.window = window  # type: Window
+        self.window = window
+
+        # Available scenes
         self.scene = 0
         self.scenes = [
             WelcomeScreen(window, self),
@@ -33,7 +35,14 @@ class Director(EventBus):
         return self.scenes[self.scene]
 
     def __add_event_handlers(self):
-        # Add all event handlers from scene
+        """
+        Adds all event handlers from the current scene to Pyglet's handler stack.
+        This is an alternative to using the @window.event decorator,
+        since we cannot use that in this context.
+        A caveat of this is that we have to explicitly register and unregister
+        event handlers every time we switch scenes, but that's much better than registering
+        all handlers at once and forgetting about them afterward.
+        """
         for listener_name in self.__handler_names:
             if listener_name in dir(self.__current_scene):
                 listener = getattr(self.__current_scene, listener_name)
