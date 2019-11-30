@@ -114,8 +114,7 @@ class CourseViewer(Window):
         if len(self.course_data) > 0:
             self.generate_rows()
         else:
-            self.closed = True
-            self.close()
+            self.on_close()
 
     def switch_to(self):
         super().switch_to()
