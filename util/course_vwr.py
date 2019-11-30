@@ -76,8 +76,8 @@ class CourseViewer(Window):
                         button.on_mouse_leave()
 
                         # Remove course
-                        course_name = self.course_rows[i][1].text
-                        del self.course_data[course_name]
+                        course_section = self.course_rows[i][0].text
+                        del self.course_data[course_section]
                         self.regenerate_rows()
                         break
 
