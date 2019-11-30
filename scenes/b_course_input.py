@@ -21,18 +21,13 @@ class CourseInputScreen(Scene):
         self.init_sprite('waves', waves, is_button=False)
 
         # Next button
-        next_button = Button('tick', self.window, self.batch, y=self.margin)
+        next_button = Button('next', self.window, self.batch, y=self.margin)
         next_button.x = self.window.width - self.margin - next_button.image.width
         self.init_sprite('next_button', next_button)
 
         # Add button
         add_button = Button('add-course', self.window, self.batch, x=self.margin, y=self.margin)
         self.init_sprite('add_button', add_button)
-
-        # View button
-        view_button = Button('view-courses', self.window, self.batch,
-                             x=(1.5*self.margin) + add_button.width, y=self.margin)
-        self.init_sprite('view_button', view_button)
 
         # Section
         self.inputs = [
@@ -54,7 +49,8 @@ class CourseInputScreen(Scene):
             Text('Section', size=14, x=self.margin + 250, y=350, batch=self.batch),
             Text('Venue', size=14, x=self.margin, y=280, batch=self.batch),
             Text('Instructor (optional)', size=14, x=self.margin, y=210, batch=self.batch),
-            Text('0 courses added', size=12, x=self.margin, y=100, batch=self.batch)
+            Text('', size=12, x=add_button.x + add_button.width + self.margin,
+                 y=self.margin + add_button.height//2 - 4, batch=self.batch)
         ]
 
         # Course manager instance
@@ -66,7 +62,30 @@ class CourseInputScreen(Scene):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if self.is_clicked('next_button', x, y) and button == LEFT:
-            self.bus.emit('next_scene')
+            self.manager.view_courses()
+        elif self.is_clicked('add_button', x, y) and button == LEFT:
+            # Get course details
+            title = self.inputs[0].content
+            section = self.inputs[1].content
+            venue = self.inputs[2].content
+            instructor = self.inputs[3].content
+
+            # Make sure title and venue are not empty
+            if len(title) and len(section) and len(venue):
+                self.manager.add_course(title, section, venue, instructor)
+
+                # Update course count
+                num_courses = self.manager.num_courses
+                self.labels[4].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
+
+                # Put focus back on first text input
+                self.set_focus(self.inputs[0])
+
+                # Empty text inputs
+                for text_field in self.inputs:
+                    text_field.content = ''
+            else:
+                print('Either title, section, or venue were left empty')
         else:
             for text_field in self.inputs:
                 if text_field.hit_test(x, y):
@@ -75,32 +94,6 @@ class CourseInputScreen(Scene):
                     return
             else:
                 self.set_focus(None)
-
-                if self.sprites['add_button'][0].hit_test(x, y):
-                    # Get course details
-                    title = self.inputs[0].content
-                    section = self.inputs[1].content
-                    venue = self.inputs[2].content
-                    instructor = self.inputs[3].content
-
-                    # Make sure title and venue are not empty
-                    if len(title) and len(section) and len(venue):
-                        self.manager.add_course(title, section, venue, instructor)
-
-                        # Update course count
-                        num_courses = self.manager.num_courses
-                        self.labels[4].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
-
-                        # Put focus back on first text input
-                        self.set_focus(self.inputs[0])
-
-                        # Empty text inputs
-                        for text_field in self.inputs:
-                            text_field.content = ''
-                    else:
-                        print('Either title, section, or venue were left empty')
-                elif self.sprites['view_button'][0].hit_test(x, y):
-                    self.manager.view_courses()
 
     def on_key_press(self, symbol, modifiers):
         if symbol == key.TAB:
