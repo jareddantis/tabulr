@@ -1,4 +1,4 @@
-from pyglet.window import Window
+from pyglet.window import Window, mouse
 from pyglet.gl import *
 from pyglet.graphics import Batch
 from ui import Text, Button
@@ -46,7 +46,29 @@ class CourseViewer(Window):
         self.parent_window.switch_to()
         self.parent_window.activate()
 
+    def on_mouse_motion(self, x, y, dx, dy):
+        for button in self.delete_buttons:
+            if button.hit_test(x, y):
+                button.on_mouse_enter()
+            else:
+                button.on_mouse_leave()
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        if button == mouse.LEFT:
+            for i in range(len(self.course_data)):
+                button = self.delete_buttons[i]
+                if button.hit_test(x, y):
+                    button.on_mouse_leave()
+
+                    # Remove course
+                    course_name = self.course_rows[i][1].text
+                    del self.course_data[course_name]
+                    self.regenerate_rows()
+                    break
+
     def generate_rows(self):
+        self.course_rows = []
+        self.delete_buttons = []
         base_y = self.labels[5].y - self.labels[5].content_height - 8
         for course_name, course_details in self.course_data.items():
             # Course details
@@ -64,6 +86,21 @@ class CourseViewer(Window):
 
             # Render next row at lower y
             base_y -= course_row[0].content_height + 16
+
+    def regenerate_rows(self):
+        # Delete on-screen rows
+        for row in self.course_rows:
+            for label in row:
+                label.delete()
+        for button in self.delete_buttons:
+            button.delete()
+
+        # Check if there is anything to render
+        if len(self.course_data) > 0:
+            self.regenerate_rows()
+        else:
+            self.closed = True
+            self.close()
 
     def switch_to(self):
         super().switch_to()

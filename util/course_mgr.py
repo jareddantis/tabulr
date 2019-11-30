@@ -13,9 +13,6 @@ class CourseManager:
     def add_course(self, title, section, venue, instructor):
         self.courses[title] = (section, venue, instructor)
 
-    def remove_course(self, title):
-        pass
-
     def view_courses(self):
         if self.viewer is not None and not self.viewer.closed:
             # Window already spawned
