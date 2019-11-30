@@ -32,6 +32,12 @@ class CourseViewer(Window):
             Text('Instructor', x=480, y=self.heading_y, size=12, bold=True, batch=self.batch),
         ]
 
+        # Next button
+        next_button = Button('next', self, self.batch, y=self.margin)
+        next_button.x = self.width - self.margin - next_button.image.width
+        next_button.scale = 0.8
+        self.next_button = next_button
+
         # Rows
         self.delete_buttons = []
         self.course_rows = []
@@ -41,32 +47,39 @@ class CourseViewer(Window):
         self.clear()
         self.batch.draw()
 
-    def on_close(self):
-        self.on_close_callback()
+    def on_close(self, proceed=False):
+        self.on_close_callback(proceed)
         self.closed = True
         self.close()
         self.parent_window.switch_to()
         self.parent_window.activate()
 
     def on_mouse_motion(self, x, y, dx, dy):
-        for button in self.delete_buttons:
+        buttons = [self.next_button]
+        buttons.extend(self.delete_buttons)
+        for button in buttons:
             if button.hit_test(x, y):
                 button.on_mouse_enter()
+                break
             else:
                 button.on_mouse_leave()
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == mouse.LEFT:
-            for i in range(len(self.course_data)):
-                button = self.delete_buttons[i]
-                if button.hit_test(x, y):
-                    button.on_mouse_leave()
+            if self.next_button.hit_test(x, y):
+                # Proceed to next scene
+                self.on_close(True)
+            else:
+                for i in range(len(self.course_data)):
+                    button = self.delete_buttons[i]
+                    if button.hit_test(x, y):
+                        button.on_mouse_leave()
 
-                    # Remove course
-                    course_name = self.course_rows[i][1].text
-                    del self.course_data[course_name]
-                    self.regenerate_rows()
-                    break
+                        # Remove course
+                        course_name = self.course_rows[i][1].text
+                        del self.course_data[course_name]
+                        self.regenerate_rows()
+                        break
 
     def generate_rows(self):
         self.course_rows = []

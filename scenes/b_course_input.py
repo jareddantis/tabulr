@@ -60,11 +60,20 @@ class CourseInputScreen(Scene):
 
         # Course manager instance
         self.manager = manager
-        self.manager.set_close_handler(self.update_count)
+        self.manager.set_close_handler(self.on_viewer_closed)
+
+    def on_viewer_closed(self, proceed=False):
+        if proceed:
+            # All courses confirmed, go to next scene
+            self.bus.emit('next_scene')
+        else:
+            # User only deleted a course or something
+            self.update_count()
 
     def update_count(self):
         """
         Update on-screen course count.
+        :return:
         """
         num_courses = self.manager.num_courses
         if num_courses > 0:
