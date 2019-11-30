@@ -5,6 +5,7 @@ class CourseManager:
         self.courses = {}
         self.parent_window = parent_window
         self.viewer = None
+        self.on_viewer_close = None
 
     @property
     def num_courses(self):
@@ -12,6 +13,9 @@ class CourseManager:
 
     def add_course(self, title, section, venue, instructor):
         self.courses[title] = (section, venue, instructor)
+
+    def set_close_handler(self, fn):
+        self.on_viewer_close = fn
 
     def view_courses(self):
         if self.viewer is not None and not self.viewer.closed:
@@ -21,5 +25,5 @@ class CourseManager:
                 self.viewer.switch_to()
         else:
             # Spawn viewer window
-            self.viewer = CourseViewer(self.parent_window, self.courses)
+            self.viewer = CourseViewer(self.parent_window, self.courses, self.on_viewer_close)
             self.viewer.switch_to()

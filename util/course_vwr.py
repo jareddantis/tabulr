@@ -4,11 +4,12 @@ from pyglet.graphics import Batch
 from ui import Text, Button
 
 class CourseViewer(Window):
-    def __init__(self, parent_window, course_data):
+    def __init__(self, parent_window, course_data, on_close):
         # Create window
         super().__init__(caption='Confirm courses', style=Window.WINDOW_STYLE_TOOL)
         self.switch_to()
         self.closed = False
+        self.on_close_callback = on_close
         self.batch = Batch()
         self.parent_window = parent_window
         glClearColor(43 / 255, 65 / 255, 98 / 255, 1)
@@ -41,6 +42,7 @@ class CourseViewer(Window):
         self.batch.draw()
 
     def on_close(self):
+        self.on_close_callback()
         self.closed = True
         self.close()
         self.parent_window.switch_to()

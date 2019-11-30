@@ -55,6 +55,14 @@ class CourseInputScreen(Scene):
 
         # Course manager instance
         self.manager = manager
+        self.manager.set_close_handler(self.update_count)
+
+    def update_count(self):
+        num_courses = self.manager.num_courses
+        if num_courses > 0:
+            self.labels[4].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
+        else:
+            self.labels[4].text = ''
 
     def on_draw(self):
         super().on_draw()
@@ -75,8 +83,7 @@ class CourseInputScreen(Scene):
                 self.manager.add_course(title, section, venue, instructor)
 
                 # Update course count
-                num_courses = self.manager.num_courses
-                self.labels[4].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
+                self.update_count()
 
                 # Put focus back on first text input
                 self.set_focus(self.inputs[0])
