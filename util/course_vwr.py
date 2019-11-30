@@ -97,7 +97,7 @@ class CourseViewer(Window):
 
         # Check if there is anything to render
         if len(self.course_data) > 0:
-            self.regenerate_rows()
+            self.generate_rows()
         else:
             self.closed = True
             self.close()
