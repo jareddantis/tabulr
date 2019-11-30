@@ -102,22 +102,6 @@ class CourseInputScreen(Scene):
                 elif self.sprites['view_button'][0].hit_test(x, y):
                     self.manager.view_courses()
 
-    def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
-        if isinstance(self.window.focus, TextInput):
-            self.window.focus.caret.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
-
-    def on_text(self, text):
-        if isinstance(self.window.focus, TextInput):
-            self.window.focus.caret.on_text(text)
-
-    def on_text_motion(self, motion):
-        if isinstance(self.window.focus, TextInput):
-            self.window.focus.caret.on_text_motion(motion)
-
-    def on_text_motion_select(self, motion):
-        if isinstance(self.window.focus, TextInput):
-            self.window.focus.caret.on_text_motion_select(motion)
-
     def on_key_press(self, symbol, modifiers):
         if symbol == key.TAB:
             if modifiers & key.MOD_SHIFT:
@@ -132,14 +116,3 @@ class CourseInputScreen(Scene):
                 direction = 0
 
             self.set_focus(self.inputs[(i + direction) % len(self.inputs)])
-
-    def set_focus(self, focus):
-        if isinstance(self.window.focus, TextInput):
-            self.window.focus.caret.visible = False
-            self.window.focus.caret.mark = self.window.focus.caret.position = 0
-
-        self.window.focus = focus
-        if isinstance(focus, TextInput):
-            self.window.focus.caret.visible = True
-            self.window.focus.caret.mark = 0
-            self.window.focus.caret.position = len(self.window.focus.document.text)
