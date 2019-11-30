@@ -26,7 +26,7 @@ class WelcomeScreen(Scene):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == LEFT:
-            if self.is_clicked('next_button', x, y):
+            if self.sprites['next_button'][0].hit_test(x, y):
                 self.bus.emit('next_scene')
 
     def on_mouse_motion(self, x, y, dx, dy):

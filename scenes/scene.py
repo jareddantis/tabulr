@@ -24,20 +24,6 @@ class Scene:
         """
         self.sprites[name] = (sprite, is_button)
 
-    def is_clicked(self, sprite_name, mouse_x, mouse_y):
-        """
-        Check if a mouse click falls on a sprite.
-        :param sprite_name: Name of sprite to check
-        :param mouse_x: x-coordinate of mouse click
-        :param mouse_y: y-coordinate of mouse click
-        """
-        sprite = self.sprites[sprite_name][0]
-        sprite_min_x = sprite.x
-        sprite_max_x = sprite_min_x + sprite.image.width
-        sprite_min_y = sprite.y
-        sprite_max_y = sprite_min_y + sprite.image.height
-        return sprite_min_x <= mouse_x <= sprite_max_x and sprite_min_y <= mouse_y <= sprite_max_y
-
     def on_destroy(self):
         """
         Removes all registered sprites from video memory.

@@ -19,7 +19,7 @@ class ImageUploadScreen(Scene):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == LEFT:
-            if self.is_clicked('pick_button', x, y):
+            if self.sprites['pick_button'][0].hit_test(x, y):
                 # Spawn file picker
                 file_path = filedialog.askopenfilename(filetypes=[('Image files', '.jpg .png')])
                 print(file_path)

@@ -61,9 +61,9 @@ class CourseInputScreen(Scene):
         self.window.set_caption('tabulr | Input subjects')
 
     def on_mouse_press(self, x, y, button, modifiers):
-        if self.is_clicked('next_button', x, y) and button == LEFT:
+        if self.sprites['next_button'][0].hit_test(x, y) and button == LEFT:
             self.manager.view_courses()
-        elif self.is_clicked('add_button', x, y) and button == LEFT:
+        elif self.sprites['add_button'][0].hit_test(x, y) and button == LEFT:
             # Get course details
             title = self.inputs[0].content
             section = self.inputs[1].content
