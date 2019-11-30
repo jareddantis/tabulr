@@ -1,5 +1,5 @@
 from event_bus import EventBus
-from scenes import WelcomeScreen, CourseInputScreen
+from scenes import *
 from pyglet.window import Window
 from .course_mgr import CourseManager
 
@@ -11,7 +11,8 @@ class Director(EventBus):
         self.scene = 0
         self.scenes = [
             WelcomeScreen(window, self),
-            CourseInputScreen(window, self, self.course_mgr)
+            CourseInputScreen(window, self, self.course_mgr),
+            ImageUploadScreen(window, self),
         ]
 
     @property
