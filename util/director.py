@@ -1,7 +1,7 @@
 from event_bus import EventBus
 from scenes import WelcomeScreen, CourseInputScreen
 from pyglet.window import Window
-from util.course_mgr import CourseManager
+from .course_mgr import CourseManager
 
 class Director(EventBus):
     def __init__(self, window: Window):

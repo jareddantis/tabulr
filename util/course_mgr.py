@@ -1,4 +1,4 @@
-from scenes.b2_course_view import CourseViewer
+from .course_vwr import CourseViewer
 
 class CourseManager:
     def __init__(self, parent_window, bus):
