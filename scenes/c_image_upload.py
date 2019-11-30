@@ -21,5 +21,6 @@ class ImageUploadScreen(Scene):
         if button == LEFT:
             if self.sprites['pick_button'][0].hit_test(x, y):
                 # Spawn file picker
+                # Not working on macOS - we have no choice except to explicitly specify a path for now
                 file_path = filedialog.askopenfilename(filetypes=[('Image files', '.jpg .png')])
                 print(file_path)
