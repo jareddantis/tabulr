@@ -3,9 +3,9 @@ from pyglet import window, clock, app, gl
 from res import Resource
 from util.director import Director
 
-res = Resource()                                    # Application graphical/font resources
+res = Resource()                             # Application graphical/font resources
 window = window.Window(caption='tabulr')     # Main application window
-director = Director(window)                         # For switching between scenes
+director = Director(window)                  # For switching between scenes
 
 @director.on('next_scene')
 def on_next_scene():
