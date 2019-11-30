@@ -26,7 +26,7 @@ class CourseInputScreen(Scene):
         self.init_sprite('next_button', next_button)
 
         # Add button
-        add_button = Button('add-to-sched', self.window, self.batch, x=self.margin, y=self.margin)
+        add_button = Button('add-course', self.window, self.batch, x=self.margin, y=self.margin)
         self.init_sprite('add_button', add_button)
 
         # View button
