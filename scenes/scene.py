@@ -1,4 +1,5 @@
 from pyglet.graphics import Batch
+from ui import TextInput
 
 class Scene:
     def __init__(self, window, bus):
@@ -70,22 +71,34 @@ class Scene:
                 self.window.set_mouse_cursor(self.window.get_system_mouse_cursor(self.window.CURSOR_DEFAULT))
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
-        pass
+        if isinstance(self.window.focus, TextInput):
+            self.window.focus.caret.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
 
     def on_text(self, text):
-        pass
+        if isinstance(self.window.focus, TextInput):
+            self.window.focus.caret.on_text(text)
 
     def on_text_motion(self, motion):
-        pass
+        if isinstance(self.window.focus, TextInput):
+            self.window.focus.caret.on_text_motion(motion)
 
     def on_text_motion_select(self, motion):
-        pass
+        if isinstance(self.window.focus, TextInput):
+            self.window.focus.caret.on_text_motion_select(motion)
 
     def on_key_press(self, symbol, modifiers):
         pass
 
     def set_focus(self, focus):
-        pass
+        if isinstance(self.window.focus, TextInput):
+            self.window.focus.caret.visible = False
+            self.window.focus.caret.mark = self.window.focus.caret.position = 0
+
+        self.window.focus = focus
+        if isinstance(focus, TextInput):
+            self.window.focus.caret.visible = True
+            self.window.focus.caret.mark = 0
+            self.window.focus.caret.position = len(self.window.focus.document.text)
 
     def update(self, dt):
         pass

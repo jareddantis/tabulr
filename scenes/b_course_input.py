@@ -1,5 +1,5 @@
 from ui import Button, Text, TextInput
-from util.scene import Scene
+from .scene import Scene
 from pyglet.window import key
 from pyglet.window.mouse import *
 from pyglet.sprite import Sprite
@@ -38,6 +38,8 @@ class CourseInputScreen(Scene):
         self.inputs = [
             # Course Title
             TextInput('', self.margin, 320, 200, self.batch),
+            # Section
+            TextInput('', self.margin + 250, 320, 100, self.batch),
             # Venue
             TextInput('', self.margin, 250, self.window.width - 210, self.batch),
             # Instructor (Optional)
@@ -49,6 +51,7 @@ class CourseInputScreen(Scene):
         # Section labels
         self.labels = [
             Text('Course title', size=14, x=self.margin, y=350, batch=self.batch),
+            Text('Section', size=14, x=self.margin + 250, y=350, batch=self.batch),
             Text('Venue', size=14, x=self.margin, y=280, batch=self.batch),
             Text('Instructor (optional)', size=14, x=self.margin, y=210, batch=self.batch),
             Text('0 courses added', size=12, x=self.margin, y=100, batch=self.batch)
@@ -67,24 +70,26 @@ class CourseInputScreen(Scene):
         else:
             for text_field in self.inputs:
                 if text_field.hit_test(x, y):
-                    self.set_focus(input)
-                    break
+                    self.set_focus(text_field)
+                    text_field.caret.on_mouse_press(x, y, button, modifiers)
+                    return
             else:
                 self.set_focus(None)
 
                 if self.sprites['add_button'][0].hit_test(x, y):
                     # Get course details
                     title = self.inputs[0].content
-                    venue = self.inputs[1].content
-                    instructor = self.inputs[2].content
+                    section = self.inputs[1].content
+                    venue = self.inputs[2].content
+                    instructor = self.inputs[3].content
 
                     # Make sure title and venue are not empty
-                    if len(title) and len(venue):
-                        self.manager.add_course(title, venue, instructor)
+                    if len(title) and len(section) and len(venue):
+                        self.manager.add_course(title, section, venue, instructor)
 
                         # Update course count
                         num_courses = self.manager.num_courses
-                        self.labels[3].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
+                        self.labels[4].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
 
                         # Put focus back on first text input
                         self.set_focus(self.inputs[0])
@@ -93,28 +98,9 @@ class CourseInputScreen(Scene):
                         for text_field in self.inputs:
                             text_field.content = ''
                     else:
-                        print('Either title or venue were left empty')
+                        print('Either title, section, or venue were left empty')
                 elif self.sprites['view_button'][0].hit_test(x, y):
                     self.manager.view_courses()
-
-            if self.window.focus:
-                self.window.focus.caret.on_mouse_press(x, y, button, modifiers)
-
-    def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
-        if self.window.focus:
-            self.window.focus.caret.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
-
-    def on_text(self, text):
-        if self.window.focus:
-            self.window.focus.caret.on_text(text)
-
-    def on_text_motion(self, motion):
-        if self.window.focus:
-            self.window.focus.caret.on_text_motion(motion)
-
-    def on_text_motion_select(self, motion):
-        if self.window.focus:
-            self.window.focus.caret.on_text_motion_select(motion)
 
     def on_key_press(self, symbol, modifiers):
         if symbol == key.TAB:
@@ -130,14 +116,3 @@ class CourseInputScreen(Scene):
                 direction = 0
 
             self.set_focus(self.inputs[(i + direction) % len(self.inputs)])
-
-    def set_focus(self, focus):
-        if self.window.focus:
-            self.window.focus.caret.visible = False
-            self.window.focus.caret.mark = self.window.focus.caret.position = 0
-
-        self.window.focus = focus
-        if self.window.focus:
-            self.window.focus.caret.visible = True
-            self.window.focus.caret.mark = 0
-            self.window.focus.caret.position = len(self.window.focus.document.text)
