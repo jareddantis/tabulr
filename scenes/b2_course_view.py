@@ -1,6 +1,6 @@
 from pyglet.window import Window
 from pyglet import gl, graphics
-from util.scene import Scene
+from scenes.scene import Scene
 from ui import Text
 
 class CourseViewer(Scene):
