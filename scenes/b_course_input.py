@@ -44,13 +44,16 @@ class CourseInputScreen(Scene):
         self.set_focus(self.inputs[0])
 
         # Section labels
+        self.error_elapsed = 0
+        self.error_opacity = 0
         self.labels = [
             Text('Course title', size=14, x=self.margin, y=350, batch=self.batch),
             Text('Section', size=14, x=self.margin + 250, y=350, batch=self.batch),
             Text('Venue', size=14, x=self.margin, y=280, batch=self.batch),
             Text('Instructor (optional)', size=14, x=self.margin, y=210, batch=self.batch),
             Text('', size=12, x=add_button.x + add_button.width + self.margin,
-                 y=self.margin + add_button.height//2 - 4, batch=self.batch)
+                 y=self.margin + add_button.height//2 - 4, batch=self.batch),
+            Text('', size=12, bold=True, x=self.margin, y=self.margin*2 + add_button.height, batch=self.batch)
         ]
 
         # Course manager instance
@@ -70,7 +73,11 @@ class CourseInputScreen(Scene):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if self.sprites['next_button'][0].hit_test(x, y) and button == LEFT:
-            self.manager.view_courses()
+            if self.manager.num_courses > 0:
+                self.hide_error_message()
+                self.manager.view_courses()
+            else:
+                self.set_error_message('Please add at least one course first.')
         elif self.sprites['add_button'][0].hit_test(x, y) and button == LEFT:
             # Get course details
             title = self.inputs[0].content
@@ -80,6 +87,7 @@ class CourseInputScreen(Scene):
 
             # Make sure title and venue are not empty
             if len(title) and len(section) and len(venue):
+                self.hide_error_message()
                 self.manager.add_course(title, section, venue, instructor)
 
                 # Update course count
@@ -92,7 +100,7 @@ class CourseInputScreen(Scene):
                 for text_field in self.inputs:
                     text_field.content = ''
             else:
-                print('Either title, section, or venue were left empty')
+                self.set_error_message('Title, section, and venue cannot be empty.')
         else:
             for text_field in self.inputs:
                 if text_field.hit_test(x, y):
@@ -116,3 +124,22 @@ class CourseInputScreen(Scene):
                 direction = 0
 
             self.set_focus(self.inputs[(i + direction) % len(self.inputs)])
+
+    def hide_error_message(self):
+        self.labels[5].color = (0, 0, 0, 0)
+        self.error_opacity = 0
+
+    def set_error_message(self, msg):
+        self.labels[5].text = msg
+        self.labels[5].color = (236, 64, 122, 255)
+        self.error_elapsed = 0
+        self.error_opacity = 255
+
+    def update(self, dt):
+        if self.error_opacity > 0:
+            self.error_elapsed += dt
+            if self.error_elapsed > 1.5:
+                self.labels[5].color = (236, 64, 122, self.error_opacity)
+                self.error_opacity -= 10
+        else:
+            self.hide_error_message()
