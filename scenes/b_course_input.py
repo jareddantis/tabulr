@@ -104,18 +104,21 @@ class CourseInputScreen(Scene):
 
             # Make sure title and venue are not empty
             if len(title) and len(section) and len(venue):
-                self.hide_error_message()
-                self.manager.add_course(title, section, venue, instructor)
+                if not self.manager.check_section(section):
+                    self.hide_error_message()
+                    self.manager.add_course(title, section, venue, instructor)
 
-                # Update course count
-                self.update_count()
+                    # Update course count
+                    self.update_count()
 
-                # Put focus back on first text input
-                self.set_focus(self.inputs[0])
+                    # Put focus back on first text input
+                    self.set_focus(self.inputs[0])
 
-                # Empty text inputs
-                for text_field in self.inputs:
-                    text_field.content = ''
+                    # Empty text inputs
+                    for text_field in self.inputs:
+                        text_field.content = ''
+                else:
+                    self.set_error_message('A course with the same section already exists.')
             else:
                 self.set_error_message('Title, section, and venue cannot be empty.')
         else:

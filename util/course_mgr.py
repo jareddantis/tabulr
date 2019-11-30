@@ -15,7 +15,10 @@ class CourseManager:
         return len(self.courses)
 
     def add_course(self, title, section, venue, instructor):
-        self.courses[title] = (section, venue, instructor)
+        self.courses[section] = (title, venue, instructor)
+
+    def check_section(self, section):
+        return section in self.courses.keys()
 
     def set_close_handler(self, fn):
         """

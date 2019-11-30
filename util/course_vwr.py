@@ -15,8 +15,8 @@ class CourseViewer(Window):
         glClearColor(43 / 255, 65 / 255, 98 / 255, 1)
 
         # The courses entered so far will be stored in self.course_data.
-        # This is a dict, where each key is the course name
-        # and the value is a tuple of the format (<section>, <venue>, <instructor>).
+        # This is a dict, where each key is the course section
+        # and the value is a tuple of the format (<title>, <venue>, <instructor>).
         self.course_data = course_data
 
         # UI text
@@ -85,9 +85,9 @@ class CourseViewer(Window):
         self.course_rows = []
         self.delete_buttons = []
         base_y = self.labels[5].y - self.labels[5].content_height - 8
-        for course_name, course_details in self.course_data.items():
+        for course_section, course_details in self.course_data.items():
             # Course details
-            course_section, course_venue, course_instructor = course_details
+            course_name, course_venue, course_instructor = course_details
             course_row = [
                 Text(course_section, x=self.x_coords[0], y=base_y, size=12, batch=self.batch),
                 Text(course_name, x=self.x_coords[1], y=base_y, size=12, batch=self.batch),
