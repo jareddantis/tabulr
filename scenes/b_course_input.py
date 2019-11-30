@@ -38,6 +38,8 @@ class CourseInputScreen(Scene):
         self.inputs = [
             # Course Title
             TextInput('', self.margin, 320, 200, self.batch),
+            # Section
+            TextInput('', self.margin + 250, 320, 100, self.batch),
             # Venue
             TextInput('', self.margin, 250, self.window.width - 210, self.batch),
             # Instructor (Optional)
@@ -49,6 +51,7 @@ class CourseInputScreen(Scene):
         # Section labels
         self.labels = [
             Text('Course title', size=14, x=self.margin, y=350, batch=self.batch),
+            Text('Section', size=14, x=self.margin + 250, y=350, batch=self.batch),
             Text('Venue', size=14, x=self.margin, y=280, batch=self.batch),
             Text('Instructor (optional)', size=14, x=self.margin, y=210, batch=self.batch),
             Text('0 courses added', size=12, x=self.margin, y=100, batch=self.batch)
@@ -75,16 +78,17 @@ class CourseInputScreen(Scene):
                 if self.sprites['add_button'][0].hit_test(x, y):
                     # Get course details
                     title = self.inputs[0].content
-                    venue = self.inputs[1].content
-                    instructor = self.inputs[2].content
+                    section = self.inputs[1].content
+                    venue = self.inputs[2].content
+                    instructor = self.inputs[3].content
 
                     # Make sure title and venue are not empty
-                    if len(title) and len(venue):
-                        self.manager.add_course(title, venue, instructor)
+                    if len(title) and len(section) and len(venue):
+                        self.manager.add_course(title, section, venue, instructor)
 
                         # Update course count
                         num_courses = self.manager.num_courses
-                        self.labels[3].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
+                        self.labels[4].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
 
                         # Put focus back on first text input
                         self.set_focus(self.inputs[0])
@@ -93,7 +97,7 @@ class CourseInputScreen(Scene):
                         for text_field in self.inputs:
                             text_field.content = ''
                     else:
-                        print('Either title or venue were left empty')
+                        print('Either title, section, or venue were left empty')
                 elif self.sprites['view_button'][0].hit_test(x, y):
                     self.manager.view_courses()
 

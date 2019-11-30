@@ -11,8 +11,8 @@ class CourseManager:
     def num_courses(self):
         return len(self.courses)
 
-    def add_course(self, title, venue, instructor):
-        self.courses[title] = (venue, instructor)
+    def add_course(self, title, section, venue, instructor):
+        self.courses[title] = (section, venue, instructor)
 
     def view_courses(self):
         if self.viewer is not None and not self.viewer.closed:
