@@ -1,12 +1,12 @@
 from pyglet.window import Window
 from pyglet.gl import *
 from pyglet.graphics import Batch
-from ui import Text
+from ui import Text, Button
 
 class CourseViewer(Window):
     def __init__(self, parent_window, course_data):
         # Create window
-        super().__init__(caption='View courses', style=Window.WINDOW_STYLE_TOOL)
+        super().__init__(caption='Confirm courses', style=Window.WINDOW_STYLE_TOOL)
         self.switch_to()
         self.closed = False
         self.batch = Batch()
@@ -19,12 +19,22 @@ class CourseViewer(Window):
         self.course_data = course_data
 
         # UI text
-        margin=36
+        self.margin = 36
+        self.x_coords = [100, 250, 370, 480] # section, title, venue, instructor
+        self.heading_y = self.height - 100
         self.labels = [
-            Text('View', x=margin, y=self.height - margin, size=14, batch=self.batch),
-            Text('courses', x=margin + 50, y=self.height - margin, size=14, bold=True, batch=self.batch),
-            Text(str(self.course_data.items()), x=margin, y=margin, size=10, batch=self.batch)
+            Text('Confirm your', x=self.margin, y=self.height - self.margin - 12, size=20, batch=self.batch),
+            Text('courses', x=self.margin + 170, y=self.height - self.margin - 12, size=20, bold=True, batch=self.batch),
+            Text('Section', x=100, y=self.heading_y, size=12, bold=True, batch=self.batch),
+            Text('Title', x=250, y=self.heading_y, size=12, bold=True, batch=self.batch),
+            Text('Venue', x=370, y=self.heading_y, size=12, bold=True, batch=self.batch),
+            Text('Instructor', x=480, y=self.heading_y, size=12, bold=True, batch=self.batch),
         ]
+
+        # Rows
+        self.delete_buttons = []
+        self.course_rows = []
+        self.generate_rows()
 
     def on_draw(self):
         self.clear()
@@ -35,6 +45,25 @@ class CourseViewer(Window):
         self.close()
         self.parent_window.switch_to()
         self.parent_window.activate()
+
+    def generate_rows(self):
+        base_y = self.labels[5].y - self.labels[5].content_height - 8
+        for course_name, course_details in self.course_data.items():
+            # Course details
+            course_section, course_venue, course_instructor = course_details
+            course_row = [
+                Text(course_section, x=self.x_coords[0], y=base_y, size=12, batch=self.batch),
+                Text(course_name, x=self.x_coords[1], y=base_y, size=12, batch=self.batch),
+                Text(course_venue, x=self.x_coords[2], y=base_y, size=12, batch=self.batch),
+                Text(course_instructor, x=self.x_coords[3], y=base_y, size=12, batch=self.batch),
+            ]
+            self.course_rows.append(course_row)
+
+            # Delete course button
+            self.delete_buttons.append(Button('delete', self, self.batch, x=self.margin, y=base_y - 6))
+
+            # Render next row at lower y
+            base_y -= course_row[0].content_height + 16
 
     def switch_to(self):
         super().switch_to()
