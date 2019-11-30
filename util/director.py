@@ -43,8 +43,8 @@ class Director(EventBus):
 
     def __remove_event_handlers(self):
         # Remove all added event handlers from scene
-        for listener in self.__added_handlers:
-            self.window.remove_handlers(listener)
+        while self.__added_handlers:
+            self.window.remove_handlers(self.__added_handlers.pop())
 
     def on_draw(self):
         self.__current_scene.on_draw()
