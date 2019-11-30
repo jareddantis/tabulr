@@ -70,8 +70,9 @@ class CourseInputScreen(Scene):
         else:
             for text_field in self.inputs:
                 if text_field.hit_test(x, y):
-                    self.set_focus(input)
-                    break
+                    self.set_focus(text_field)
+                    text_field.caret.on_mouse_press(x, y, button, modifiers)
+                    return
             else:
                 self.set_focus(None)
 
@@ -101,23 +102,20 @@ class CourseInputScreen(Scene):
                 elif self.sprites['view_button'][0].hit_test(x, y):
                     self.manager.view_courses()
 
-            if self.window.focus:
-                self.window.focus.caret.on_mouse_press(x, y, button, modifiers)
-
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
-        if self.window.focus:
+        if isinstance(self.window.focus, TextInput):
             self.window.focus.caret.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
 
     def on_text(self, text):
-        if self.window.focus:
+        if isinstance(self.window.focus, TextInput):
             self.window.focus.caret.on_text(text)
 
     def on_text_motion(self, motion):
-        if self.window.focus:
+        if isinstance(self.window.focus, TextInput):
             self.window.focus.caret.on_text_motion(motion)
 
     def on_text_motion_select(self, motion):
-        if self.window.focus:
+        if isinstance(self.window.focus, TextInput):
             self.window.focus.caret.on_text_motion_select(motion)
 
     def on_key_press(self, symbol, modifiers):
@@ -136,12 +134,12 @@ class CourseInputScreen(Scene):
             self.set_focus(self.inputs[(i + direction) % len(self.inputs)])
 
     def set_focus(self, focus):
-        if self.window.focus:
+        if isinstance(self.window.focus, TextInput):
             self.window.focus.caret.visible = False
             self.window.focus.caret.mark = self.window.focus.caret.position = 0
 
         self.window.focus = focus
-        if self.window.focus:
+        if isinstance(focus, TextInput):
             self.window.focus.caret.visible = True
             self.window.focus.caret.mark = 0
             self.window.focus.caret.position = len(self.window.focus.document.text)
