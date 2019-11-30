@@ -49,9 +49,6 @@ class Scene:
     def on_draw(self):
         self.batch.draw()
 
-    def on_mouse_press(self, x, y, button, modifiers):
-        pass
-
     def on_mouse_motion(self, x, y, dx, dy):
         for text_field in self.inputs:
             # Change cursor into caret on text input hover
@@ -85,9 +82,6 @@ class Scene:
     def on_text_motion_select(self, motion):
         if isinstance(self.window.focus, TextInput):
             self.window.focus.caret.on_text_motion_select(motion)
-
-    def on_key_press(self, symbol, modifiers):
-        pass
 
     def set_focus(self, focus):
         if isinstance(self.window.focus, TextInput):
