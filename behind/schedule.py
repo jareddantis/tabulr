@@ -244,7 +244,6 @@ schedule = {'': timeslots}
 for weekday in day:
     orderedclass = []
     for subject in day[weekday]:
-        startctr = 0
         for startctr in range(len(timeslots) - 1):
             if classtimes[subject][0] == timeslots[startctr]:
                 orderedclass.append(subject)
@@ -262,5 +261,15 @@ for weekday in day:
 
 df = pd.DataFrame(schedule)
 print(df)
+
+fig, ax = plt.subplots(figsize=(10.8, 19.2)) # set size frame
+ax.xaxis.set_visible(False)  # hide the x axis
+ax.yaxis.set_visible(False)  # hide the y axis
+ax.set_frame_on(False)  # no visible frame, uncomment if size is ok
+tabla = table(ax, df, loc='center', colWidths=[0.175]*len(df.columns))  # where df is your data frame
+tabla.auto_set_font_size(True) # Activate set fontsize manually
+# tabla.set_fontsize(12) # if ++fontsize is necessary ++colWidths
+tabla.scale(1.2, 1.2) # change size table
+plt.savefig('table.png', transparent=True)
 
 # Dimensions: 1080 x 1920
