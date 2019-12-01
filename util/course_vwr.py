@@ -96,30 +96,27 @@ class CourseViewer(Window):
                 # Proceed to next scene
                 self.on_close(True)
             elif self.ui_buttons[1].hit_test(x, y):
-                print('prev page clicked')
                 # Previous page
                 if self.page > 0:
                     self.page -= 1
                     self.regenerate_rows()
             elif self.ui_buttons[2].hit_test(x, y):
                 # Next page
-                print('next page clicked')
-                print(self.page)
-                print(self.pages)
                 if self.page < len(self.pages) - 1:
                     self.page += 1
                     self.regenerate_rows()
             else:
                 for i in range(len(self.delete_buttons)):
-                    print('Checking for click event on button {}'.format(i))
                     button = self.delete_buttons[i]
                     if button.hit_test(x, y):
-                        print('Delete clicked at row {}'.format(i))
                         button.on_mouse_leave()
 
                         # Remove course
                         course_section = self.course_rows[i][0].text
                         del self.course_data[course_section]
+
+                        # Regenerate on-screen table
+                        self.page = 0
                         self.regenerate_rows()
                         break
 
@@ -132,7 +129,7 @@ class CourseViewer(Window):
                 return text
             return text[:max_len] + '...'
 
-        base_y = self.labels[5].y - self.labels[5].content_height - 8
+        base_y = self.labels[5].y - self.labels[5].content_height - 12
         course_data = self.pages[self.page]
         for course_section, course_details in course_data.items():
             # Course details
@@ -177,7 +174,6 @@ class CourseViewer(Window):
             for i in range(0, len(data), size):
                 yield {k: data[k] for k in islice(it, size)}
 
-        self.page = 0
         self.pages = []
         for page in chunks(self.course_data):
             self.pages.append(page)
