@@ -32,13 +32,13 @@ class CourseInputScreen(Scene):
         # Text inputs
         self.inputs = [
             # Course Title
-            TextInput('', self.margin, 320, 200, self.batch),
+            TextInput('', self.margin, 310, 280, self.batch),
             # Section
-            TextInput('', self.margin + 250, 320, 100, self.batch),
+            TextInput('', self.margin + 330, 310, 100, self.batch),
             # Venue
-            TextInput('', self.margin, 250, self.window.width - 210, self.batch),
+            TextInput('', self.margin, 240, self.window.width - 210, self.batch),
             # Instructor (Optional)
-            TextInput('', self.margin, 180, self.window.width - 210, self.batch)
+            TextInput('', self.margin, 170, self.window.width - 210, self.batch)
         ]
         self.window.focus = None
         self.set_focus(self.inputs[0])
@@ -46,7 +46,7 @@ class CourseInputScreen(Scene):
         # Text input labels and status messages
         self.labels = [
             Text('Course title', size=14, x=self.margin, y=350, batch=self.batch),
-            Text('Section', size=14, x=self.margin + 250, y=350, batch=self.batch),
+            Text('Section', size=14, x=self.margin + 330, y=350, batch=self.batch),
             Text('Venue', size=14, x=self.margin, y=280, batch=self.batch),
             Text('Instructor (optional)', size=14, x=self.margin, y=210, batch=self.batch),
             Text('', size=12, x=add_button.x + add_button.width + self.margin,
@@ -138,6 +138,12 @@ class CourseInputScreen(Scene):
             self.set_focus(self.inputs[(i + direction) % len(self.inputs)])
         elif symbol == key.ENTER or symbol == key.RETURN:
             self.add_course()
+        elif symbol == key.A and (modifiers & key.MOD_COMMAND or modifiers & key.MOD_CTRL):
+            if isinstance(self.window.focus, TextInput):
+                # Select all text by quickly switching to next input and back
+                i = self.inputs.index(self.window.focus)
+                self.set_focus(self.inputs[(i + 1) % len(self.inputs)])
+                self.set_focus(self.inputs[i])
 
     def add_course(self):
         # Get course details
