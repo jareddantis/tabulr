@@ -1,5 +1,5 @@
 from pyglet.graphics import Batch
-from ui import TextInput
+from ui import TextInput, Text
 from pyglet.sprite import Sprite
 from pyglet.resource import image
 
@@ -17,6 +17,11 @@ class Scene:
         self.margin = 36
         self.sprites = {}
         self.inputs = []
+
+        # Error message
+        self.error_msg = Text('', size=12, bold=True, batch=self.batch, x=self.margin, color=(236, 64, 122, 255))
+        self.error_elapsed = 0
+        self.error_opacity = 0
 
         # Waves background
         if draw_waves:
@@ -97,5 +102,33 @@ class Scene:
             self.window.focus.caret.mark = 0
             self.window.focus.caret.position = len(self.window.focus.document.text)
 
+    def hide_error_message(self):
+        """
+        Hides the error message.
+        """
+        self.error_msg.color = (236, 64, 122, 0)
+        self.error_opacity = 0
+
+    def set_error_message(self, msg):
+        """
+        Displays a red error message.
+        :param msg: Error message
+        """
+        self.error_msg.text = msg
+        self.error_msg.color = (236, 64, 122, 255)
+        self.error_elapsed = 0
+        self.error_opacity = 255
+
     def update(self, dt):
-        pass
+        """
+        Fades out the error message, if any, after 1.5 seconds of initial visibility.
+        :param dt: Time elapsed since last update
+        """
+        if self.error_msg.text != '':
+            if self.error_opacity > 0:
+                self.error_elapsed += dt
+                if self.error_elapsed > 1.5:
+                    self.error_msg.color = (236, 64, 122, self.error_opacity)
+                    self.error_opacity -= 10
+            else:
+                self.hide_error_message()

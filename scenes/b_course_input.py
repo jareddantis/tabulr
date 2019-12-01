@@ -42,12 +42,11 @@ class CourseInputScreen(Scene):
             Text('Instructor (optional)', size=14, x=self.margin, y=210, batch=self.batch),
             Text('', size=12, x=add_button.x + add_button.width + self.margin,
                  y=self.margin + add_button.height//2 - 4, batch=self.batch),
-            Text('', size=12, bold=True, x=self.margin, y=self.margin*2 + add_button.height, batch=self.batch)
+
         ]
 
-        # Error message properties
-        self.error_elapsed = 0
-        self.error_opacity = 0
+        # Error message
+        self.error_msg.y = self.margin * 2 + add_button.height
 
         # Course manager instance
         self.manager = manager
@@ -158,33 +157,3 @@ class CourseInputScreen(Scene):
                 self.set_error_message('A course with the same section already exists.')
         else:
             self.set_error_message('Title, section, and venue cannot be empty.')
-
-    def hide_error_message(self):
-        """
-        Hides the error message.
-        """
-        self.labels[5].color = (0, 0, 0, 0)
-        self.error_opacity = 0
-
-    def set_error_message(self, msg):
-        """
-        Displays a red error message.
-        :param msg: Error message
-        """
-        self.labels[5].text = msg
-        self.labels[5].color = (236, 64, 122, 255)
-        self.error_elapsed = 0
-        self.error_opacity = 255
-
-    def update(self, dt):
-        """
-        Fades out the error message after 1.5 seconds of initial visibility.
-        :param dt: Time elapsed since last update
-        """
-        if self.error_opacity > 0:
-            self.error_elapsed += dt
-            if self.error_elapsed > 1.5:
-                self.labels[5].color = (236, 64, 122, self.error_opacity)
-                self.error_opacity -= 10
-        else:
-            self.hide_error_message()
