@@ -16,8 +16,9 @@ class WelcomeScreen(Scene):
         self.init_sprite('next_button', Button('next', self.window, self.batch,
                                                x=self.margin, y=(self.window.height//2) - 100))
 
-        waves = Sprite(image('front-waves.png'), x=0, y=0, batch=self.batch)
-        waves.opacity = 160
+        waves = Sprite(image('front-waves.png'), x=0, y=-30, batch=self.batch)
+        waves.opacity = 140
+        self.elapsed = 0
         self.init_sprite('waves', waves, is_button=False)
 
     def on_mouse_press(self, x, y, button, modifiers):
@@ -33,3 +34,15 @@ class WelcomeScreen(Scene):
             next_button.on_mouse_enter()
         else:
             next_button.on_mouse_leave()
+
+    def update(self, dt):
+        # Breathing waves
+        waves = self.sprites['waves'][0]
+        self.elapsed += dt
+
+        if ((int(self.elapsed) % 4) - (int(self.elapsed) % 2)) > 0:
+            waves.y += 0.2
+            waves.opacity += 0.5
+        else:
+            waves.y -= 0.2
+            waves.opacity -= 0.5
