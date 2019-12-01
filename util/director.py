@@ -14,6 +14,7 @@ class Director(EventBus):
             WelcomeScreen(window, self),
             CourseInputScreen(window, self, self.course_mgr),
             ImageUploadScreen(window, self),
+            GeneratorScreen(window, self)
         ]
 
         # List of event handlers to add to window per scene
