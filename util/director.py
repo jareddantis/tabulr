@@ -9,14 +9,8 @@ class Director(EventBus):
         self.window = window
 
         # Available scenes
-        self.scene = 0
-        self.scenes = [
-            WelcomeScreen(window, self),
-            CourseInputScreen(window, self, self.course_mgr),
-            ImageUploadScreen(window, self, self.course_mgr),
-            GeneratorScreen(window, self, self.course_mgr),
-            DoneScreen(window, self)
-        ]
+        self.scene = 4
+        self.__init_scenes()
 
         # List of event handlers to add to window per scene
         self.__handler_names = [
@@ -56,6 +50,15 @@ class Director(EventBus):
         while self.__added_handlers:
             self.window.remove_handlers(self.__added_handlers.pop())
 
+    def __init_scenes(self):
+        self.scenes = [
+            WelcomeScreen(self.window, self),
+            CourseInputScreen(self.window, self, self.course_mgr),
+            ImageUploadScreen(self.window, self, self.course_mgr),
+            GeneratorScreen(self.window, self, self.course_mgr),
+            DoneScreen(self.window, self)
+        ]
+
     def on_draw(self):
         self.__current_scene.on_draw()
 
@@ -76,3 +79,15 @@ class Director(EventBus):
             # Increment scene and add new event handlers
             self.scene += 1
             self.__add_event_handlers()
+
+    def on_reset(self):
+        """
+        Starts the application over.
+        :return:
+        """
+        self.__current_scene.on_destroy()
+        self.__remove_event_handlers()
+        self.scene = 0
+        self.course_mgr.reset()
+        self.__init_scenes()
+        self.__add_event_handlers()

@@ -32,6 +32,11 @@ class CourseManager:
     def check_section(self, section):
         return section in self._courses.keys()
 
+    def reset(self):
+        self._courses = {}
+        self._img_path = ''
+        self.viewer = None
+
     def set_close_handler(self, fn):
         """
         Sets function to call when the course viewer is closed.

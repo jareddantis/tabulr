@@ -11,6 +11,10 @@ director = Director(window)                  # For switching between scenes
 def on_next_scene():
     director.on_next_scene()
 
+@director.on('start_over')
+def on_start_over():
+    director.on_reset()
+
 @window.event
 def on_draw():
     window.clear()

@@ -8,7 +8,7 @@ import imghdr
 
 class ImageUploadScreen(Scene):
     def __init__(self, window, bus, manager):
-        super().__init__(window, bus, draw_waves=True, title='Select a background image')
+        super().__init__(window, bus, draw_waves=True, title='tabulr | Select a background image')
         self.manager = manager
         self.title = Text('Select a', batch=self.batch, size=22,
                           x=self.margin, y=self.window.height - self.margin - 22)

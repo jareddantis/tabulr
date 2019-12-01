@@ -8,7 +8,7 @@ from pyglet import gl
 
 class ImageViewer(Popup):
     def __init__(self, file_path, parent_window, on_close):
-        super().__init__(parent_window, on_close, caption='Confirm background image',
+        super().__init__(parent_window, on_close, caption='tabulr | Confirm background image',
                          width=640, height=640)
 
         # Layer groups

@@ -7,7 +7,7 @@ from util.generator import Generator
 
 class GeneratorScreen(Scene):
     def __init__(self, window, bus, course_manager):
-        super().__init__(window, bus, draw_waves=False, title='Generating')
+        super().__init__(window, bus, draw_waves=False, title='tabulr | Generating')
         self.manager = course_manager
         self.generated = False
 
