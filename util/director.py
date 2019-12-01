@@ -13,8 +13,9 @@ class Director(EventBus):
         self.scenes = [
             WelcomeScreen(window, self),
             CourseInputScreen(window, self, self.course_mgr),
-            ImageUploadScreen(window, self),
-            GeneratorScreen(window, self)
+            ImageUploadScreen(window, self, self.course_mgr),
+            GeneratorScreen(window, self, self.course_mgr),
+            DoneScreen(window, self)
         ]
 
         # List of event handlers to add to window per scene

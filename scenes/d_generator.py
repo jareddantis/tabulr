@@ -2,10 +2,14 @@ from .scene import Scene
 from pyglet.resource import image
 from pyglet.sprite import Sprite
 from ui import Text
+from threading import Thread
+from util.generator import Generator
 
 class GeneratorScreen(Scene):
-    def __init__(self, window, bus):
-        super().__init__(window, bus, draw_waves=True, title='Generating')
+    def __init__(self, window, bus, course_manager):
+        super().__init__(window, bus, draw_waves=False, title='Generating')
+        self.manager = course_manager
+        self.generated = False
 
         # Spinner
         self.elapsed = 0
@@ -23,6 +27,21 @@ class GeneratorScreen(Scene):
                              x=self.window.width//2, y=self.window.height//3 - 24)
         self.title.anchor_x = 'center'
         self.subtitle.anchor_x = 'center'
+
+    def on_draw(self):
+        super().on_draw()
+        if not self.generated:
+            # Generate then advance to next scene
+            self.generate()
+            self.generated = True
+            self.bus.emit('next_scene')
+
+    def generate(self):
+        # Generate on separate thread
+        generator = Generator(self.manager.get_courses(), self.manager.image_path)
+        generator_thread = Thread(target=generator.generate)
+        generator_thread.start()
+        generator_thread.join()
 
     def update(self, dt):
         """

@@ -7,8 +7,9 @@ from util.image_vwr import ImageViewer
 import imghdr
 
 class ImageUploadScreen(Scene):
-    def __init__(self, window, bus):
+    def __init__(self, window, bus, manager):
         super().__init__(window, bus, draw_waves=True, title='Select a background image')
+        self.manager = manager
         self.title = Text('Select a', batch=self.batch, size=22,
                           x=self.margin, y=self.window.height - self.margin - 22)
         self.title_bold = Text('background image', bold=True, batch=self.batch, size=22,
@@ -64,6 +65,7 @@ class ImageUploadScreen(Scene):
                 result = self.check_file(file_path)
 
                 if result == 'ok':
+                    self.manager.image_path = file_path
                     self.image_viewer = ImageViewer(file_path, self.window, self.on_viewer_closed)
                 else:
                     self.set_error_message(result)

@@ -2,23 +2,35 @@ from .course_vwr import CourseViewer
 
 class CourseManager:
     def __init__(self, parent_window):
-        self.courses = {}
+        self._courses = {}
+        self._img_path = ''
         self.parent_window = parent_window
         self.viewer = None
         self.on_viewer_close = None
+
+    def get_courses(self):
+        return self._courses.copy()
+
+    @property
+    def image_path(self):
+        return self._img_path
+
+    @image_path.setter
+    def image_path(self, image):
+        self._img_path = image
 
     @property
     def num_courses(self):
         """
         Number of courses added so far.
         """
-        return len(self.courses)
+        return len(self._courses)
 
     def add_course(self, title, section, venue, instructor):
-        self.courses[section] = (title, venue, instructor)
+        self._courses[section] = (title, venue, instructor)
 
     def check_section(self, section):
-        return section in self.courses.keys()
+        return section in self._courses.keys()
 
     def set_close_handler(self, fn):
         """
@@ -40,4 +52,4 @@ class CourseManager:
                 self.viewer.switch_to()
         else:
             # Spawn viewer window
-            self.viewer = CourseViewer(self.parent_window, self.courses, self.on_viewer_close)
+            self.viewer = CourseViewer(self.parent_window, self._courses, self.on_viewer_close)
