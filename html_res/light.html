@@ -3,9 +3,12 @@
     <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
     <title>tabulr | Schedule</title>
     <style>
+        .html2canvas-container { width: 3000px !important; height: 3000px !important; }
         body {
             font-family: 'Rubik';font-size: 22px;
             border-collapse: collapse;
+            margin: 0;
+            padding: 0;
         }
 
         table {
@@ -33,7 +36,7 @@
         #save-btn {
             position: fixed;
             right: 0;
-            left: 0;
+            top: 0;
             width: 200px;
             height: 100px;
             background: black;
@@ -58,38 +61,44 @@
 <script>
     var saveButton = document.getElementById('save-btn');
     saveButton.addEventListener('click', function(){
-      html2canvas(document.getElementById('sched'), {
-        scale: 2,
-        onrendered: function (c) {
-          var setPixelated = function(ctx) {
-              ctx.imageSmoothingEnabled = false;
-              ctx.mozImageSmoothingEnabled = false;
-              ctx.oImageSmoothingEnabled = false;
-              ctx.webkitImageSmoothingEnabled = false;
-              ctx.msImageSmoothingEnabled = false;
-          };
+      // Build filename: sched-date
+      let filename = 'sched-', date = new Date();
+      filename += date.getFullYear();
+      if (date.getDate() < 10) { filename += '0'; }
+      filename += date.getDate();
+      if (date.getMonth() + 1 < 10) { filename += '0'; }
+      filename += (date.getMonth() + 1);
 
-          var context = c.getContext('2d', {alpha:false});
-          setPixelated(context);
-          var dataUrl = c.toDataURL("image/png"),
-              isFileSaverSupported = !!new Blob;
+      html2canvas(document.getElementById('sched'), { scale: 2 }).then(function(c){
+        var setPixelated = function(ctx) {
+            ctx.imageSmoothingEnabled = false;
+            ctx.mozImageSmoothingEnabled = false;
+            ctx.oImageSmoothingEnabled = false;
+            ctx.webkitImageSmoothingEnabled = false;
+            ctx.msImageSmoothingEnabled = false;
+        };
 
-          if (!isFileSaverSupported) {
-            window.location.href = dataUrl;
-          } else {
-            var data = atob(dataUrl.substring(22)), dataArr = new Uint8Array(data.length);
+        var context = c.getContext('2d', {alpha:false});
+        setPixelated(context);
+        var dataUrl = c.toDataURL("image/png"),
+            isFileSaverSupported = !!new Blob;
+        console.log('saving');
 
-            for (let i = 0; i < data.length; i++) {
-              dataArr[i] = data.charCodeAt(i);
-            }
+        if (!isFileSaverSupported) {
+          window.location.href = dataUrl;
+        } else {
+          var data = atob(dataUrl.substring(22)), dataArr = new Uint8Array(data.length);
 
-            let dataBlob = new Blob([dataArr.buffer], {
-                "type": "image/png"
-            });
-            saveAs(dataBlob, "schedule.png");
+          for (let i = 0; i < data.length; i++) {
+            dataArr[i] = data.charCodeAt(i);
           }
+
+          let dataBlob = new Blob([dataArr.buffer], {
+              "type": "image/png"
+          });
+          saveAs(dataBlob, filename + ".png");
         }
-    });
+      })
     });
 </script>
 </body>

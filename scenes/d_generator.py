@@ -38,7 +38,7 @@ class GeneratorScreen(Scene):
 
     def generate(self):
         # Generate on separate thread
-        generator = Generator(self.manager.get_courses(), self.manager.image_path)
+        generator = Generator(self.manager.get_courses(), self.manager.image_path, self.manager.image_type)
         generator_thread = Thread(target=generator.generate)
         generator_thread.start()
         generator_thread.join()

@@ -4,6 +4,7 @@ class CourseManager:
     def __init__(self, parent_window):
         self._courses = {}
         self._img_path = ''
+        self._img_type = ''
         self.parent_window = parent_window
         self.viewer = None
         self.on_viewer_close = None
@@ -18,6 +19,14 @@ class CourseManager:
     @image_path.setter
     def image_path(self, image):
         self._img_path = image
+
+    @property
+    def image_type(self):
+        return self._img_type
+
+    @image_type.setter
+    def image_type(self, file_type):
+        self._img_type = file_type
 
     @property
     def num_courses(self):

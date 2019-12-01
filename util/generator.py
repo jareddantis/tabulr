@@ -1,9 +1,11 @@
 import pandas as pd
+from base64 import b64encode
 
 class Generator:
-    def __init__(self, courses, image_path):
+    def __init__(self, courses, image_path, image_type):
         self.courses = courses
         self.image_path = image_path
+        self.image_type = image_type
 
     def generate(self):
         monlist = []
@@ -263,14 +265,17 @@ class Generator:
         df = pd.DataFrame(schedule)
         df.set_index('Time', inplace=True)
 
-        htmlfile = open("htmlfile.html", "w+")
-        # image background inserto of Hell
+        # convert img to base64, since we cannot save canvases as dataurl if they have been 'tainted'
+        with open(self.image_path, 'rb') as image_file:
+            image_enc = b64encode(image_file.read())
+        image_str = 'data:image/' + self.image_type + ';base64,' + image_enc.decode()
 
         # styling
         style = 'Light'
         template = open("html_res/light.html", "r") if style == 'Light' else open("html_res/dark.html", "r")
-        html_content = template.read().replace('<!--Insert-image-path-here-->', self.image_path)
+        html_content = template.read().replace('<!--Insert-image-path-here-->', image_str)
         html_content = html_content.replace('<!--Insert-table-here-->', df.to_html())
+        htmlfile = open("htmlfile.html", "w+")
         htmlfile.write(html_content)
         htmlfile.close()
         return

@@ -66,6 +66,7 @@ class ImageUploadScreen(Scene):
 
                 if result == 'ok':
                     self.manager.image_path = file_path
+                    self.manager.image_type = imghdr.what(file_path)
                     self.image_viewer = ImageViewer(file_path, self.window, self.on_viewer_closed)
                 else:
                     self.set_error_message(result)
