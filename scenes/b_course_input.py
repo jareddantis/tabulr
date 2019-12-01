@@ -96,31 +96,7 @@ class CourseInputScreen(Scene):
                 # No courses specified
                 self.set_error_message('Please add at least one course first.')
         elif self.sprites['add_button'][0].hit_test(x, y) and button == LEFT:
-            # Get course details
-            title = self.inputs[0].content
-            section = self.inputs[1].content
-            venue = self.inputs[2].content
-            instructor = self.inputs[3].content
-
-            # Make sure title and venue are not empty
-            if len(title) and len(section) and len(venue):
-                if not self.manager.check_section(section):
-                    self.hide_error_message()
-                    self.manager.add_course(title, section, venue, instructor)
-
-                    # Update course count
-                    self.update_count()
-
-                    # Put focus back on first text input
-                    self.set_focus(self.inputs[0])
-
-                    # Empty text inputs
-                    for text_field in self.inputs:
-                        text_field.content = ''
-                else:
-                    self.set_error_message('A course with the same section already exists.')
-            else:
-                self.set_error_message('Title, section, and venue cannot be empty.')
+            self.add_course()
         else:
             for text_field in self.inputs:
                 if text_field.hit_test(x, y):
@@ -130,9 +106,19 @@ class CourseInputScreen(Scene):
             else:
                 self.set_focus(None)
 
+    def on_text(self, text):
+        """
+        Suppress text entry when pressing Enter/Return,
+        so we don't add carriage returns to the text input.
+        :param text: Newly entered text
+        """
+        if ord(text) != 13:
+            super().on_text(text)
+
     def on_key_press(self, symbol, modifiers):
         """
         Allows focusing text inputs through Tab and Shift+Tab.
+        Also allows course addition through Enter/Return.
         :param symbol: Keyboard symbol
         :param modifiers: Keyboard modifier keys
         :return:
@@ -150,6 +136,35 @@ class CourseInputScreen(Scene):
                 direction = 0
 
             self.set_focus(self.inputs[(i + direction) % len(self.inputs)])
+        elif symbol == key.ENTER or symbol == key.RETURN:
+            self.add_course()
+
+    def add_course(self):
+        # Get course details
+        title = self.inputs[0].content
+        section = self.inputs[1].content
+        venue = self.inputs[2].content
+        instructor = self.inputs[3].content
+
+        # Make sure title and venue are not empty
+        if len(title) and len(section) and len(venue):
+            if not self.manager.check_section(section):
+                self.hide_error_message()
+                self.manager.add_course(title, section, venue, instructor)
+
+                # Update course count
+                self.update_count()
+
+                # Put focus back on first text input
+                self.set_focus(self.inputs[0])
+
+                # Empty text inputs
+                for text_field in self.inputs:
+                    text_field.content = ''
+            else:
+                self.set_error_message('A course with the same section already exists.')
+        else:
+            self.set_error_message('Title, section, and venue cannot be empty.')
 
     def hide_error_message(self):
         """
