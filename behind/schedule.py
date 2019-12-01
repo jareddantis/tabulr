@@ -265,19 +265,14 @@ if __name__ == "__main__":
     df.set_index('Time', inplace=True)
     print(df)
 
-htmlfile = open("htmlfile.html", "w+")
-imagepath = '\path\image.jpg'
-# image background inserto of Hell
+    htmlfile = open("htmlfile.html", "w+")
+    imagepath = '\path\image.jpg'
+    # image background inserto of Hell
 
-# styling
-style = 'Light'
-if style == 'Light':
-    stylefile = open("light.html", "a+")
-elif style == 'Dark':
-    stylefile = open("dark.html", "a+")
-htmlfile.write(stylefile)
-
-htmlfile.write(df.to_html)
-htmlfile.close()
+    # styling
+    style = 'Light'
+    template = open("light.html", "r") if style == 'Light' else open("dark.html", "r")
+    htmlfile.write(template.read().replace('<!--Insert-table-here-->', df.to_html()))
+    htmlfile.close()
 
     # Dimensions: 1080 x 1920
