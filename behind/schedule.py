@@ -1,6 +1,4 @@
-import matplotlib.pyplot as plt
 import pandas as pd
-from pandas.plotting import table
 
 classdict = {'THU': ('1 Title', '1 BLDG Venue', '1 Instructor'),
              'WFZ': ('2 Title', '2 BLDG Venue', '2 Instructor'),
@@ -13,7 +11,8 @@ thurslist = []
 frilist = []
 satlist = []
 
-# sorting classes into days
+# SECTION 1
+# Sorting inputted classes into days
 for section, course in classdict.items():
     # 1 - 1.5 hour classes
     if section[:2] == 'TH':
@@ -57,7 +56,8 @@ day = {'Mon': monlist,
        'Fri': frilist,
        'Sat': satlist}
 
-# filtering school days
+# SECTION 1.1
+# Filtering school days
 forpopping = []
 for weekday in day:
     if day[weekday] == []:
@@ -66,9 +66,15 @@ for weekday in day:
 for weekend in forpopping:
     day.pop(weekend)
 
-classtimes = {}
 
-# creating active times
+
+# SECTION 2
+# Making the schedule using dict
+
+# SECTION 2.1
+# Making a list of active timeslots
+
+classtimes = {}
 timeslots = []
 for section, course in classdict.items():
     subject = course[0]
@@ -240,6 +246,8 @@ for section, course in classdict.items():
             timeslots.append('11:30')
 timeslots.sort()
 
+# SECTION 2.2
+# Creating the actual dict
 schedule = {'Time': timeslots}
 for weekday in day:
     orderedclass = []
@@ -260,19 +268,22 @@ for weekday in day:
     schedule[weekday] = orderedclass
 
 
+# SECTION 3
+# Creating the DataFrame for tabular schedule
 if __name__ == "__main__":
     df = pd.DataFrame(schedule)
     df.set_index('Time', inplace=True)
     print(df)
 
+# SECTION 4
+# Creating the HTML file for stylized schedule
     htmlfile = open("htmlfile.html", "w+")
-    imagepath = '\path\image.jpg'
-    # image background inserto of Hell
+    imagepath = '\path\image.jpg' # Image background
 
-    # styling
+    # Styling
     style = 'Light'
-    template = open("light.html", "r") if style == 'Light' else open("dark.html", "r")
-    htmlfile.write(imagepath.replace('<!--Insert-image-path-here-->', df.to_html()))
+    template = open("light.html", "r") if style == 'Light' else open("dark.html", "r") # Different Modes
+    htmlfile.write(imagepath.replace('<!--Insert-image-path-here-->', df.to_html())) # Edit image background into html file
     htmlfile.write(template.read().replace('<!--Insert-table-here-->', df.to_html()))
     htmlfile.close()
 
