@@ -1,6 +1,5 @@
 from event_bus import EventBus
 from scenes import *
-from pyglet.window import Window
 from .course_mgr import CourseManager
 
 class Director(EventBus):
