@@ -28,15 +28,15 @@ class CourseViewer(Window):
 
         # UI text
         self.margin = 36
-        self.x_coords = [100, 250, 370, 480]  # section, title, venue, instructor
+        self.x_coords = [80, 250, 370, 480]  # section, title, venue, instructor
         self.heading_y = self.height - 90
         self.labels = [
             Text('Confirm your', x=self.margin, y=self.height - self.margin - 12, size=20, batch=self.batch),
             Text('courses', x=self.margin + 170, y=self.height - self.margin - 12, size=20, bold=True, batch=self.batch),
-            Text('Section', x=100, y=self.heading_y, size=12, bold=True, batch=self.batch),
-            Text('Title', x=250, y=self.heading_y, size=12, bold=True, batch=self.batch),
-            Text('Venue', x=370, y=self.heading_y, size=12, bold=True, batch=self.batch),
-            Text('Instructor', x=480, y=self.heading_y, size=12, bold=True, batch=self.batch),
+            Text('Section', x=self.x_coords[0], y=self.heading_y, size=12, bold=True, batch=self.batch),
+            Text('Title', x=self.x_coords[1], y=self.heading_y, size=12, bold=True, batch=self.batch),
+            Text('Venue', x=self.x_coords[2], y=self.heading_y, size=12, bold=True, batch=self.batch),
+            Text('Instructor', x=self.x_coords[3], y=self.heading_y, size=12, bold=True, batch=self.batch),
             Text('Page 1 of 1', x=self.margin * 4, y=self.margin + 8, size=10, batch=self.batch)
         ]
 
@@ -135,7 +135,7 @@ class CourseViewer(Window):
             # Course details
             course_name, course_venue, course_instructor = course_details
             course_row = [
-                Text(truncate_text(course_section, 15), x=self.x_coords[0], y=base_y, size=12, batch=self.batch),
+                Text(truncate_text(course_section, 18), x=self.x_coords[0], y=base_y, size=12, batch=self.batch),
                 Text(truncate_text(course_name), x=self.x_coords[1], y=base_y, size=12, batch=self.batch),
                 Text(truncate_text(course_venue), x=self.x_coords[2], y=base_y, size=12, batch=self.batch),
                 Text(truncate_text(course_instructor, 15), x=self.x_coords[3], y=base_y, size=12, batch=self.batch),
