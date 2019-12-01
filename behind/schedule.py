@@ -272,6 +272,7 @@ if __name__ == "__main__":
     # styling
     style = 'Light'
     template = open("light.html", "r") if style == 'Light' else open("dark.html", "r")
+    htmlfile.write(imagepath.replace('<!--Insert-image-path-here-->', df.to_html()))
     htmlfile.write(template.read().replace('<!--Insert-table-here-->', df.to_html()))
     htmlfile.close()
 
