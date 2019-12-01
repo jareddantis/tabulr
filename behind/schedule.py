@@ -265,14 +265,19 @@ if __name__ == "__main__":
     df.set_index('Time', inplace=True)
     print(df)
 
-    fig, ax = plt.subplots(figsize=(10.8, 19.2)) # set size frame
-    ax.xaxis.set_visible(False)  # hide the x axis
-    ax.yaxis.set_visible(False)  # hide the y axis
-    ax.set_frame_on(False)  # no visible frame, uncomment if size is ok
-    tabla = table(ax, df, loc='center', colWidths=[0.175]*len(df.columns))  # where df is your data frame
-    tabla.auto_set_font_size(True) # Activate set fontsize manually
-    # tabla.set_fontsize(12) # if ++fontsize is necessary ++colWidths
-    tabla.scale(1.2, 1.2) # change size table
-    plt.savefig('table.png', transparent=True)
+htmlfile = open("htmlfile.html", "w+")
+imagepath = '\path\image.jpg'
+# image background inserto of Hell
+
+# styling
+style = 'Light'
+if style == 'Light':
+    stylefile = open("light.html", "a+")
+elif style == 'Dark':
+    stylefile = open("dark.html", "a+")
+htmlfile.write(stylefile)
+
+htmlfile.write(df.to_html)
+htmlfile.close()
 
     # Dimensions: 1080 x 1920
