@@ -41,4 +41,3 @@ class CourseManager:
         else:
             # Spawn viewer window
             self.viewer = CourseViewer(self.parent_window, self.courses, self.on_viewer_close)
-            self.viewer.switch_to()

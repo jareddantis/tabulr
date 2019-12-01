@@ -1,20 +1,16 @@
-from pyglet.window import Window, mouse
+from pyglet.window import mouse
 from pyglet import gl
-from pyglet.graphics import Batch, draw
+from pyglet.graphics import draw
 from pyglet.sprite import Sprite
 from pyglet.resource import image
 from ui import Text, Button
 from itertools import islice
+from .popup import Popup
 
-class CourseViewer(Window):
+class CourseViewer(Popup):
     def __init__(self, parent_window, course_data, on_close):
         # Create window
-        super().__init__(caption='Confirm courses', style=Window.WINDOW_STYLE_TOOL)
-        self.switch_to()
-        self.closed = False
-        self.on_close_callback = on_close
-        self.batch = Batch()
-        self.parent_window = parent_window
+        super().__init__(parent_window, on_close, caption='Confirm courses')
 
         # Window background
         gl.glClearColor(43 / 255, 65 / 255, 98 / 255, 1)
@@ -27,7 +23,6 @@ class CourseViewer(Window):
         self.course_data = course_data
 
         # UI text
-        self.margin = 36
         self.x_coords = [80, 250, 370, 480]  # section, title, venue, instructor
         self.heading_y = self.height - 90
         self.labels = [
@@ -61,7 +56,7 @@ class CourseViewer(Window):
         self.generate_rows()
 
     def on_draw(self):
-        self.clear()
+        super().on_draw()
 
         # Line separators
         top_y = self.labels[0].y - 16
@@ -70,16 +65,6 @@ class CourseViewer(Window):
                                       self.width - self.margin, top_y)))
         draw(2, gl.GL_LINES, ('v2i', (self.margin, bottom_y,
                                       self.width - self.margin, bottom_y)))
-
-        # On-screen text and buttons
-        self.batch.draw()
-
-    def on_close(self, proceed=False):
-        self.on_close_callback(proceed)
-        self.closed = True
-        self.close()
-        self.parent_window.switch_to()
-        self.parent_window.activate()
 
     def on_mouse_motion(self, x, y, dx, dy):
         for button_list in (self.ui_buttons, self.delete_buttons):
@@ -183,7 +168,3 @@ class CourseViewer(Window):
 
     def update_page_count(self):
         self.labels[6].text = 'Page {} of {}'.format(self.page + 1, len(self.pages))
-
-    def switch_to(self):
-        super().switch_to()
-        self.activate()
