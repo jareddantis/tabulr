@@ -1,19 +1,30 @@
 from pyglet.graphics import Batch
 from ui import TextInput
+from pyglet.sprite import Sprite
+from pyglet.resource import image
 
 class Scene:
-    def __init__(self, window, bus):
+    def __init__(self, window, bus, title='Welcome to tabulr', draw_waves=False):
         """
         Initialize the Scene object.
         :param window: Pyglet window object. Must be same throughout application.
         :param bus: Event bus. Used for communicating scene changes to main application thread.
         """
         self.window = window
+        self.window_title = title
         self.bus = bus
         self.batch = Batch()
         self.margin = 36
         self.sprites = {}
         self.inputs = []
+
+        # Waves background
+        if draw_waves:
+            waves_img = image('side-waves.png')
+            waves_img.anchor_x = waves_img.width
+            waves = Sprite(waves_img, x=window.width, y=0, batch=self.batch)
+            waves.opacity = 160
+            self.init_sprite('waves', waves, is_button=False)
 
     def init_sprite(self, name, sprite, is_button=True):
         """
@@ -37,6 +48,9 @@ class Scene:
         Draws all objects that are part of this scene's render batch.
         """
         self.batch.draw()
+
+        # Window title
+        self.window.set_caption(self.window_title)
 
     def on_mouse_motion(self, x, y, dx, dy):
         for text_field in self.inputs:

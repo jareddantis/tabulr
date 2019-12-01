@@ -5,7 +5,7 @@ from tkinter import filedialog
 
 class ImageUploadScreen(Scene):
     def __init__(self, window, bus):
-        super().__init__(window, bus)
+        super().__init__(window, bus, draw_waves=True, title='Select a background image')
         self.title = Text('Select', batch=self.batch, size=22,
                           x=self.margin, y=self.window.height - self.margin - 22)
         self.title_bold = Text('an image', bold=True, batch=self.batch, size=22,

@@ -20,10 +20,6 @@ class WelcomeScreen(Scene):
         waves.opacity = 160
         self.init_sprite('waves', waves, is_button=False)
 
-    def on_draw(self):
-        super().on_draw()
-        self.window.set_caption('Welcome to tabulr')
-
     def on_mouse_press(self, x, y, button, modifiers):
         if button == LEFT:
             if self.sprites['next_button'][0].hit_test(x, y):

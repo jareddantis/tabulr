@@ -2,23 +2,14 @@ from ui import Button, Text, TextInput
 from .scene import Scene
 from pyglet.window import key
 from pyglet.window.mouse import *
-from pyglet.sprite import Sprite
-from pyglet.resource import image
 
 class CourseInputScreen(Scene):
     def __init__(self, window, bus, manager):
-        super().__init__(window, bus)
+        super().__init__(window, bus, draw_waves=True, title='tabulr | Input subjects')
         self.title = Text('Input a', batch=self.batch, size=22,
                           x=self.margin, y=self.window.height - self.margin - 22)
         self.title_bold = Text('course', bold=True, batch=self.batch, size=22,
                                x=self.margin + self.title.content_width + 8, y=self.window.height - self.margin - 22)
-
-        # Waves background
-        waves_img = image('side-waves.png')
-        waves_img.anchor_x = waves_img.width
-        waves = Sprite(waves_img, x=window.width, y=0, batch=self.batch)
-        waves.opacity = 160
-        self.init_sprite('waves', waves, is_button=False)
 
         # Next button
         next_button = Button('next', self.window, self.batch, y=self.margin)
@@ -80,10 +71,6 @@ class CourseInputScreen(Scene):
             self.labels[4].text = '{} course{} added'.format(num_courses, 's' if num_courses != 1 else '')
         else:
             self.labels[4].text = ''
-
-    def on_draw(self):
-        super().on_draw()
-        self.window.set_caption('tabulr | Input subjects')
 
     def on_mouse_press(self, x, y, button, modifiers):
         if self.sprites['next_button'][0].hit_test(x, y) and button == LEFT:
