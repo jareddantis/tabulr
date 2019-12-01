@@ -240,7 +240,7 @@ for section, course in classdict.items():
             timeslots.append('11:30')
 timeslots.sort()
 
-schedule = {'': timeslots}
+schedule = {'Time': timeslots}
 for weekday in day:
     orderedclass = []
     for subject in day[weekday]:
@@ -262,6 +262,7 @@ for weekday in day:
 
 if __name__ == "__main__":
     df = pd.DataFrame(schedule)
+    df.set_index('Time', inplace=True)
     print(df)
 
     fig, ax = plt.subplots(figsize=(10.8, 19.2)) # set size frame
