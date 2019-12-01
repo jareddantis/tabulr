@@ -9,7 +9,7 @@ class Director(EventBus):
         self.window = window
 
         # Available scenes
-        self.scene = 4
+        self.scene = 0
         self.__init_scenes()
 
         # List of event handlers to add to window per scene
