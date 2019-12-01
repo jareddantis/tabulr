@@ -1,7 +1,7 @@
 import pyglet
 
 class Button(pyglet.sprite.Sprite):
-    def __init__(self, filename, window, batch, x=0, y=0):
+    def __init__(self, filename, window, batch, x=0, y=0, group=None):
         """
         Initialize the Button object.
         :param filename: Name of button image. For example, if we pass `tick` to this argument,
@@ -11,11 +11,16 @@ class Button(pyglet.sprite.Sprite):
         :param batch: Pyglet graphics batch. Must be the same throughout parent scene.
         :param x: x-coordinate of button position
         :param y: y-coordinate of button position
+        :param group: pyglet.graphics.OrderedGroup
         """
         self.texture_default = pyglet.resource.image('btn-{}.png'.format(filename))
         self.texture_hover = pyglet.resource.image('btn-{}-hover.png'.format(filename))
         self.window = window
-        super().__init__(self.texture_default, x=x, y=y, batch=batch)
+
+        if group is not None:
+            super().__init__(self.texture_default, x=x, y=y, batch=batch, group=group)
+        else:
+            super().__init__(self.texture_default, x=x, y=y, batch=batch)
 
     def hit_test(self, x, y):
         image_width = self.x + self.width
