@@ -1,0 +1,96 @@
+<html>
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+    <title>tabulr | Schedule</title>
+    <style>
+        body {
+            font-family: 'Rubik';font-size: 22px;
+            border-collapse: collapse;
+        }
+
+        table {
+            align: center;
+            border-collapse: collapse;
+            border-color: rgba(0, 0, 0, 0.7);
+            width: 1000px;
+            position: relative;
+            top: 550px;
+            left: 40px;
+        }
+
+        th, td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        div.fulltable {
+            width: 1080px;
+            height: 1920px;
+            background-image: url("<!--Insert-image-path-here-->");
+        }
+        #save-btn {
+            position: fixed;
+            right: 0;
+            left: 0;
+            width: 200px;
+            height: 100px;
+            background: black;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #save-btn p {
+            margin: 0;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div id="save-btn">
+    <p>Save as .png</p>
+</div>
+<div class="fulltable" id="sched"><!--Insert-table-here--></div>
+<script src="./html_res/FileSaver.min.js"></script>
+<script src="./html_res/html2canvas.min.js"></script>
+<script>
+    var saveButton = document.getElementById('save-btn');
+    saveButton.addEventListener('click', function(){
+      html2canvas(document.getElementById('sched'), {
+        scale: 2,
+        onrendered: function (c) {
+          var setPixelated = function(ctx) {
+              ctx.imageSmoothingEnabled = false;
+              ctx.mozImageSmoothingEnabled = false;
+              ctx.oImageSmoothingEnabled = false;
+              ctx.webkitImageSmoothingEnabled = false;
+              ctx.msImageSmoothingEnabled = false;
+          };
+
+          var context = c.getContext('2d', {alpha:false});
+          setPixelated(context);
+          var dataUrl = c.toDataURL("image/png"),
+              isFileSaverSupported = !!new Blob;
+
+          if (!isFileSaverSupported) {
+            window.location.href = dataUrl;
+          } else {
+            var data = atob(dataUrl.substring(22)), dataArr = new Uint8Array(data.length);
+
+            for (let i = 0; i < data.length; i++) {
+              dataArr[i] = data.charCodeAt(i);
+            }
+
+            let dataBlob = new Blob([dataArr.buffer], {
+                "type": "image/png"
+            });
+            saveAs(dataBlob, "schedule.png");
+          }
+        }
+    });
+    });
+</script>
+</body>
+</html>

@@ -268,7 +268,7 @@ class Generator:
 
         # styling
         style = 'Light'
-        template = open("behind/light.html", "r") if style == 'Light' else open("behind/dark.html", "r")
+        template = open("html_res/light.html", "r") if style == 'Light' else open("html_res/dark.html", "r")
         html_content = template.read().replace('<!--Insert-image-path-here-->', self.image_path)
         html_content = html_content.replace('<!--Insert-table-here-->', df.to_html())
         htmlfile.write(html_content)
