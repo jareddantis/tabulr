@@ -25,7 +25,7 @@ class Button(pyglet.sprite.Sprite):
     def on_mouse_enter(self):
         """
         Called when the mouse moves over the button.
-        Causes the button to switch to its hover state.
+        Causes the button to switch to its hover state and the cursor to change to a hand.
         """
         self.image = self.texture_hover
         cursor = self.window.get_system_mouse_cursor(self.window.CURSOR_HAND)
@@ -34,7 +34,7 @@ class Button(pyglet.sprite.Sprite):
     def on_mouse_leave(self):
         """
         Called when the mouse moves away from the button.
-        Causes the button to revert to its normal state.
+        Causes the button to revert to its normal state and the cursor to change back into an arrow.
         """
         self.image = self.texture_default
         cursor = self.window.get_system_mouse_cursor(self.window.CURSOR_DEFAULT)
